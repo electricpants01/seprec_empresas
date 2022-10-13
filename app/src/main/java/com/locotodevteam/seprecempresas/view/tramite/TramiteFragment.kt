@@ -37,7 +37,7 @@ class TramiteFragment : Fragment() {
         tramiteBinding.mySearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 setCardsViewGone()
-                tramiteViewModel.getTramiteDetail(query.toString())
+                tramiteViewModel.getTramiteDetail(query.toString(), requireContext())
                 return false
             }
 

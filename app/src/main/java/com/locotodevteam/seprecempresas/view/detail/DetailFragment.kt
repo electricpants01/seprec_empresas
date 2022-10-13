@@ -32,7 +32,7 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        detailViewModel.getCompanyDetail(companyId)
+        detailViewModel.getCompanyDetail(companyId, requireContext())
         // navigate up
         (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         initSubscriptions()

@@ -1,5 +1,6 @@
 package com.locotodevteam.seprecempresas.view.tramite
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.locotodevteam.seprecempresas.model.TramiteDetail
@@ -14,9 +15,9 @@ class TramiteViewModel: ViewModel() {
     val tramiteDetail = MutableLiveData<TramiteDetail>()
     val tramiteFailed = MutableLiveData<Boolean>()
 
-    fun getTramiteDetail(tramiteId: String){
+    fun getTramiteDetail(tramiteId: String, context: Context){
         CoroutineScope(Dispatchers.IO).launch {
-            val response = RetrofitClient.getRetrofitInstance().create(CompanyService::class.java).getTramiteDetail(tramiteId)
+            val response = RetrofitClient.getRetrofitInstance(context).create(CompanyService::class.java).getTramiteDetail(tramiteId)
             if(response.isSuccessful){
                 val body = response.body()
                 body?.let { tramiteDetail.postValue(it) }
