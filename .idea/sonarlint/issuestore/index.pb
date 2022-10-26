@@ -1,14 +1,8 @@
 
 }
 Mapp/src/main/java/com/locotodevteam/seprecempresas/retrofit/RetrofitClient.kt,3\2\32eff970cb197bf9876636edbf21eec811d7328e
-P
- app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
-z
-Japp/src/main/java/com/locotodevteam/seprecempresas/view/TramiteFragment.kt,e\8\e89755247c05ffc5d1a3ff1cdb4fb599c6aad227
 @
 local.properties,0\7\0712df971a99ac4d2fccb8e0fb19f377f3374cca
-?
-settings.gradle,0\5\05efc8b1657769a27696d478ded1e95f38737233
 <
 build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
 s
@@ -25,13 +19,5 @@ Qapp/src/main/java/com/locotodevteam/seprecempresas/view/detail/DetailViewModel.
 Qapp/src/main/java/com/locotodevteam/seprecempresas/view/search/SearchViewModel.kt,5\4\54473ef8dae5eeb869372a17d17040c378cad748
 y
 Iapp/src/main/java/com/locotodevteam/seprecempresas/model/CompanyDetail.kt,7\8\7858aa1c093bcac025f9655637d11e78bd31fdfd
-}
-Mapp/src/main/java/com/locotodevteam/seprecempresas/retrofit/CompanyService.kt,2\3\23eb204329798bf23de56f29568a0aa45b4f5c4c
 j
 :app/src/main/java/com/locotodevteam/seprecempresas/Util.kt,3\0\30fabff4fe425167c12ecba5f62d800c11be1d2e
-€
-Papp/src/main/java/com/locotodevteam/seprecempresas/view/detail/DetailFragment.kt,a\9\a95a6c6f2336cfdcab39ba5e8619ffb219eeec55
-‚
-Rapp/src/main/java/com/locotodevteam/seprecempresas/view/tramite/TramiteFragment.kt,6\9\69541aec9ee0bf4ccdcafcf391089f1d9a34034a
-€
-Papp/src/main/java/com/locotodevteam/seprecempresas/view/search/SearchFragment.kt,e\b\ebebd4ef6c07ccd6baa594ef8cd98544473b0732
