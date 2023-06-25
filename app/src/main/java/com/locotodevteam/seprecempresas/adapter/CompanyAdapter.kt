@@ -8,7 +8,10 @@ import com.locotodevteam.seprecempresas.R
 import com.locotodevteam.seprecempresas.databinding.ItemCompanyBinding
 import com.locotodevteam.seprecempresas.model.Company
 
-class CompanyAdapter(private var companies: List<Company.Datos.Fila>, private var listener: CompanyAdapter.OnItemClickListener): RecyclerView.Adapter<CompanyAdapter.CompanyViewHolder>() {
+class CompanyAdapter(
+    private var companies: List<Company.Datos.Fila>,
+    private var listener: CompanyAdapter.OnItemClickListener
+) : RecyclerView.Adapter<CompanyAdapter.CompanyViewHolder>() {
 
     interface OnItemClickListener {
         fun onItemClick(companyId: String)
@@ -31,7 +34,7 @@ class CompanyAdapter(private var companies: List<Company.Datos.Fila>, private va
         holder.render(item, listener)
     }
 
-    class CompanyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    class CompanyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val itemCompanyBinding = ItemCompanyBinding.bind(itemView)
 
         fun render(item: Company.Datos.Fila, listener: OnItemClickListener) {
@@ -40,7 +43,7 @@ class CompanyAdapter(private var companies: List<Company.Datos.Fila>, private va
             itemCompanyBinding.txtEstado.text = item.estado
             itemCompanyBinding.txtMatricula.text = item.codEstadoActualizacion?.nombre
             itemCompanyBinding.txtRazonSocial.text = item.razonSocial?.trimStart()
-            itemCompanyBinding.myCardView.setOnClickListener{
+            itemCompanyBinding.myCardView.setOnClickListener {
                 listener.onItemClick(item.id ?: "")
             }
         }
