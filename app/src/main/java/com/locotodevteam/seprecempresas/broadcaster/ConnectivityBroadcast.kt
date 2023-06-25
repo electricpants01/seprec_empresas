@@ -6,14 +6,18 @@ import android.content.Intent
 import android.util.Log
 import com.locotodevteam.seprecempresas.isNetworkConnected
 
-class ConnectivityBroadcast : BroadcastReceiver() {
+class ConnectivityBroadcast(private val onConnectivityChange: ConnectivityCallback) : BroadcastReceiver() {
+
+    interface ConnectivityCallback {
+        fun onNetworkConnectionChanged(isConnected: Boolean)
+    }
 
     override fun onReceive(context: Context?, intent: Intent?) {
         val isConnected = context?.isNetworkConnected()
         if (isConnected == true) {
-            Log.d("chris", "estas conectado")
+            onConnectivityChange.onNetworkConnectionChanged(true)
         } else {
-            Log.d("chris", "estas desconectado")
+            onConnectivityChange.onNetworkConnectionChanged(false)
         }
     }
 }

@@ -10,9 +10,10 @@ import androidx.navigation.ui.setupWithNavController
 import com.locotodevteam.seprecempresas.broadcaster.ConnectivityBroadcast
 import com.locotodevteam.seprecempresas.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+import hilt_aggregated_deps._com_locotodevteam_seprecempresas_view_search_SearchViewModel_HiltModules_BindsModule
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ConnectivityBroadcast.ConnectivityCallback {
 
     lateinit var mainBinding: ActivityMainBinding
     lateinit var connectivityReceiver: ConnectivityBroadcast
@@ -26,7 +27,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initBroadCastReceiver() {
-        connectivityReceiver = ConnectivityBroadcast()
+        connectivityReceiver = ConnectivityBroadcast(this)
         val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         registerReceiver(connectivityReceiver, filter)
     }
@@ -47,6 +48,14 @@ class MainActivity : AppCompatActivity() {
         // before this screen is destroyed,
         // we need to unregister the broadcast receiver because it is a memory leak
         unregisterReceiver(connectivityReceiver)
+    }
+
+    override fun onNetworkConnectionChanged(isConnected: Boolean) {
+        mainBinding.connectivityCardView.visibility = if (isConnected) {
+            android.view.View.GONE
+        } else {
+            android.view.View.VISIBLE
+        }
     }
 
 }
