@@ -2,35 +2,50 @@ package com.locotodevteam.seprecempresas.view.search
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.locotodevteam.seprecempresas.model.Company
+import androidx.lifecycle.viewModelScope
 import com.locotodevteam.seprecempresas.retrofit.CompanyService
-import com.locotodevteam.seprecempresas.retrofit.RetrofitClient
-import kotlinx.coroutines.CoroutineScope
+import com.locotodevteam.seprecempresas.retrofit.ConnectionResult
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.net.UnknownHostException
+import javax.inject.Inject
 
-class SearchViewModel: ViewModel() {
+@HiltViewModel
+class SearchViewModel @Inject constructor(
+    private val companyService: CompanyService
+) : ViewModel() {
 
     var searchCompany = MutableLiveData<String>()
-    var companyList = MutableLiveData<Company?>()
-    private var firstCall = true
+    var companyResult = MutableLiveData<ConnectionResult>()
 
-    fun firstCall(){
-        // on first call we will search for YPFB
-        if(firstCall){
-            firstCall = false
-            searchCompany("ypfb")
-        }
+    init {
+        searchCompany("ypfb")
     }
 
-    fun searchCompany(company: String){
+    fun searchCompany(company: String) {
         searchCompany.value = company
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = RetrofitClient.getRetrofitInstance().create(CompanyService::class.java).getCompany(company)
-            if(response.isSuccessful){
-                val body = response.body()
-                if(body != null){
-                    companyList.postValue(body)
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                    val response = companyService.getCompany(company)
+                    if (response?.isSuccessful == true) {
+                        val body = response?.body()
+                        body.let { body ->
+                            withContext(Dispatchers.Main) {
+                                companyResult.value = ConnectionResult.NetworkSuccess(body)
+                            }
+                        }
+                    } else {
+                        withContext(Dispatchers.Main){
+                            companyResult.value =
+                                ConnectionResult.NetworkFailure("No se encontró la empresa")
+                        }
+                }
+            } catch (e: UnknownHostException) {
+                withContext(Dispatchers.Main){
+                    companyResult.value =
+                        ConnectionResult.NetworkFailure("No hay conexión a internet")
                 }
             }
         }

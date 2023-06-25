@@ -1,15 +1,14 @@
 package com.locotodevteam.seprecempresas.view
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.locotodevteam.seprecempresas.R
 import com.locotodevteam.seprecempresas.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     lateinit var mainBinding: ActivityMainBinding
@@ -21,14 +20,15 @@ class MainActivity : AppCompatActivity() {
         initBottomNavigationView()
     }
 
-    private fun initBottomNavigationView(){
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.myNavController) as NavHostFragment
+    private fun initBottomNavigationView() {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(mainBinding.myNavController.id) as NavHostFragment
         val navController = navHostFragment.navController
         mainBinding.myBottomNavView.setupWithNavController(navController)
     }
 
-    override fun navigateUpTo(upIntent: Intent?): Boolean {
-        return super.navigateUpTo(upIntent) || findNavController(R.id.myNavController).navigateUp()
+    override fun onSupportNavigateUp(): Boolean {
+        return super.onSupportNavigateUp() || findNavController(mainBinding.myNavController.id).navigateUp()
     }
 
 
