@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
+        android:debuggable="false"
         android:name=".SeprecEmpresasApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -30,6 +31,12 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <receiver android:name=".broadcaster.ConnectivityBroadcast"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
