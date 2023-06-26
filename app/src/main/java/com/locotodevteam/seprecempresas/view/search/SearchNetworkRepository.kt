@@ -14,8 +14,8 @@ class SearchNetworkRepository @Inject constructor(
     suspend fun searchCompany(companyName: String): ConnectionResult {
         return try {
             val response = companyService.getCompany(companyName)
-            if (response?.isSuccessful == true) {
-                val body = response?.body()
+            if (response.isSuccessful) {
+                val body = response.body()
                 body.let { body ->
                     searchDatabaseRepository.insertAllCompanies(body as Company)
                     ConnectionResult.NetworkSuccess(body)
