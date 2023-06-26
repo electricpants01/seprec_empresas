@@ -1,5 +1,7 @@
 package com.locotodevteam.seprecempresas.modules
 
+import android.content.Context
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.locotodevteam.seprecempresas.retrofit.CompanyService
 import com.locotodevteam.seprecempresas.view.detail.DetailNetworkRepository
 import com.locotodevteam.seprecempresas.view.search.SearchDatabaseRepository
@@ -8,6 +10,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -29,13 +32,14 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun providesRetrofitInstance(): Retrofit {
+    fun providesRetrofitInstance(context: Context): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 okhttp3.OkHttpClient.Builder()
                     .addInterceptor(providesHttpLoggingInterceptor())
+                    .addInterceptor(ChuckerInterceptor.Builder(context).build())
                     .build()
             )
             .build()

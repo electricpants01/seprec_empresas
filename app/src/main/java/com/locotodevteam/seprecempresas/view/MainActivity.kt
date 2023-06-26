@@ -22,6 +22,10 @@ class MainActivity : AppCompatActivity(), ConnectivityBroadcast.ConnectivityCall
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
         initBottomNavigationView()
+    }
+
+    override fun onResume() {
+        super.onResume()
         initBroadCastReceiver()
     }
 
