@@ -3,6 +3,8 @@ package com.locotodevteam.seprecempresas.modules
 import android.content.Context
 import com.locotodevteam.seprecempresas.isNetworkConnected
 import com.locotodevteam.seprecempresas.retrofit.CompanyService
+import com.locotodevteam.seprecempresas.view.search.SearchDatabaseRepository
+import com.locotodevteam.seprecempresas.view.search.SearchNetworkRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,6 +46,12 @@ object NetworkModule {
     @Provides
     fun providesCompanyService(retrofit: Retrofit): CompanyService {
         return retrofit.create(CompanyService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun providesSearchNetworkRepository(companyService: CompanyService, searchDatabaseRepository: SearchDatabaseRepository): SearchNetworkRepository {
+        return SearchNetworkRepository(companyService, searchDatabaseRepository)
     }
 
 }
