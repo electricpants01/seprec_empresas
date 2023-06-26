@@ -1,7 +1,5 @@
 package com.locotodevteam.seprecempresas.modules
 
-import android.content.Context
-import com.locotodevteam.seprecempresas.isNetworkConnected
 import com.locotodevteam.seprecempresas.retrofit.CompanyService
 import com.locotodevteam.seprecempresas.view.detail.DetailNetworkRepository
 import com.locotodevteam.seprecempresas.view.search.SearchDatabaseRepository
@@ -51,7 +49,10 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun providesSearchNetworkRepository(companyService: CompanyService, searchDatabaseRepository: SearchDatabaseRepository): SearchNetworkRepository {
+    fun providesSearchNetworkRepository(
+        companyService: CompanyService,
+        searchDatabaseRepository: SearchDatabaseRepository
+    ): SearchNetworkRepository {
         return SearchNetworkRepository(companyService, searchDatabaseRepository)
     }
 

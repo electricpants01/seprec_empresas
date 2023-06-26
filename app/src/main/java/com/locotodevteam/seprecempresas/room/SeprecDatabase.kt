@@ -7,7 +7,7 @@ import com.locotodevteam.seprecempresas.room.entity.CompanyEntity
 
 
 @Database(entities = [CompanyEntity::class], version = 1, exportSchema = false)
-abstract class SeprecDatabase: RoomDatabase() {
+abstract class SeprecDatabase : RoomDatabase() {
 
     abstract fun companyDao(): CompanyDao
 }

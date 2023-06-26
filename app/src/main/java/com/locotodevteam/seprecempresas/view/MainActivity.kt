@@ -10,7 +10,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.locotodevteam.seprecempresas.broadcaster.ConnectivityBroadcast
 import com.locotodevteam.seprecempresas.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import hilt_aggregated_deps._com_locotodevteam_seprecempresas_view_search_SearchViewModel_HiltModules_BindsModule
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), ConnectivityBroadcast.ConnectivityCallback {
