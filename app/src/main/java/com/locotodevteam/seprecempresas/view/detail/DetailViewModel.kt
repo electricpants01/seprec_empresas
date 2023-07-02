@@ -3,7 +3,7 @@ package com.locotodevteam.seprecempresas.view.detail
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.locotodevteam.seprecempresas.retrofit.ConnectionResult
+import com.locotodevteam.seprecempresas.retrofit.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,7 +15,7 @@ class DetailViewModel @Inject constructor(
     private val detailNetworkRepository: DetailNetworkRepository
 ) : ViewModel() {
 
-    val companyDetailResult = MutableLiveData<ConnectionResult>()
+    val companyDetailResult = MutableLiveData<NetworkResult>()
 
     fun getCompanyDetail(companyId: String) {
         viewModelScope.launch {

@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Seprec</string>
+    <string name="company_search_not_found">La empresa no se encontró</string>
+    <string name="tramite_not_found">Tramite no encontrado</string>
+    <string name="network_error">Error de conexión</string>
 </resources>

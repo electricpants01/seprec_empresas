@@ -12,9 +12,10 @@ import com.locotodevteam.seprecempresas.R
 import com.locotodevteam.seprecempresas.databinding.FragmentTramiteBinding
 import com.locotodevteam.seprecempresas.formatDate
 import com.locotodevteam.seprecempresas.model.TramiteDetail
-import com.locotodevteam.seprecempresas.retrofit.ConnectionResult
+import com.locotodevteam.seprecempresas.retrofit.NetworkResult
 import com.locotodevteam.seprecempresas.toDate
 import com.locotodevteam.seprecempresas.view.MainActivity
+import com.locotodevteam.seprecempresas.view.setVisibility
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -58,9 +59,14 @@ class TramiteFragment : Fragment() {
     fun initSubscriptions() {
         tramiteViewModel.tramiteDetailResult.observe(viewLifecycleOwner) { result ->
             when (result) {
-                is ConnectionResult.NetworkSuccess<*> -> {
+                is NetworkResult.NetworkEmptyResult<*> -> {
+                    tramiteBinding.lottieNotFound.setVisibility = true
+                    tramiteBinding.lottieNotFound.setAnimation(R.raw.not_found2)
+                }
+                is NetworkResult.NetworkSuccess<*> -> {
                     val tramiteDetail = result.data as TramiteDetail
                     tramiteBinding.apply {
+                        lottieNotFound.setVisibility = false
                         txttramiteTitle.text =
                             "Trámite " + tramiteDetail.datos?.parametrica?.id + " - " + tramiteDetail.datos?.parametrica?.nombre
                         txtMatriculaTramite.text = tramiteDetail?.datos?.empresa?.matricula
@@ -81,7 +87,9 @@ class TramiteFragment : Fragment() {
                     setCardsViewVisible()
                 }
 
-                is ConnectionResult.NetworkFailure -> {
+                is NetworkResult.NetworkFailure -> {
+                    tramiteBinding.lottieNotFound.setVisibility = true
+                    tramiteBinding.lottieNotFound.setAnimation(R.raw.not_found2)
                     Snackbar.make(requireView(), result.message, Snackbar.LENGTH_SHORT)
                         .apply {
                             setAnchorView((activity as MainActivity).mainBinding.myBottomNavView)
@@ -94,17 +102,17 @@ class TramiteFragment : Fragment() {
 
     fun setCardsViewGone() {
         tramiteBinding.apply {
-            firstCardView.visibility = View.GONE
-            secondCardView.visibility = View.GONE
-            txtHistorial.visibility = View.GONE
+            firstCardView.setVisibility = false
+            secondCardView.setVisibility = false
+            txtHistorial.setVisibility = false
         }
     }
 
     fun setCardsViewVisible() {
         tramiteBinding.apply {
-            firstCardView.visibility = View.VISIBLE
-            secondCardView.visibility = View.VISIBLE
-            txtHistorial.visibility = View.VISIBLE
+            firstCardView.setVisibility = true
+            secondCardView.setVisibility = true
+            txtHistorial.setVisibility = true
         }
     }
 }

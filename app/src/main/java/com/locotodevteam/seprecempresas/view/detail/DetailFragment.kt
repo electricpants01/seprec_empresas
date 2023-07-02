@@ -11,8 +11,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.locotodevteam.seprecempresas.R
 import com.locotodevteam.seprecempresas.databinding.FragmentDetailBinding
 import com.locotodevteam.seprecempresas.model.CompanyDetail
-import com.locotodevteam.seprecempresas.retrofit.ConnectionResult
+import com.locotodevteam.seprecempresas.retrofit.NetworkResult
 import com.locotodevteam.seprecempresas.view.MainActivity
+import com.locotodevteam.seprecempresas.view.setVisibility
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -49,7 +50,10 @@ class DetailFragment : Fragment() {
     private fun initSubscriptions() {
         detailViewModel.companyDetailResult.observe(viewLifecycleOwner) { result ->
             when (result) {
-                is ConnectionResult.NetworkSuccess<*> -> {
+                is NetworkResult.NetworkEmptyResult<*> -> {
+                    println("Chris: es vacio :D")
+                }
+                is NetworkResult.NetworkSuccess<*> -> {
                     detailBinding.apply {
                         val companyDetail = result.data as CompanyDetail
                         txtRazonSocial.text = companyDetail.datos?.razonSocial
@@ -83,13 +87,13 @@ class DetailFragment : Fragment() {
                             }
                         }
                         txtActividadesEconomicas.text = actividadesEconomicas
-                        myContainer.visibility = View.VISIBLE
-                        myProgressbar.visibility = View.GONE
-                        lottieNotFound.visibility = View.GONE
+                        myContainer.setVisibility = true
+                        myProgressbar.setVisibility = false
+                        lottieNotFound.setVisibility = false
                     }
                 }
 
-                is ConnectionResult.NetworkFailure -> {
+                is NetworkResult.NetworkFailure -> {
                     Snackbar.make(
                         detailBinding.root,
                         result.message,
@@ -99,9 +103,9 @@ class DetailFragment : Fragment() {
                         show()
                     }
                     detailBinding.apply {
-                        myContainer.visibility = View.GONE
-                        myProgressbar.visibility = View.GONE
-                        lottieNotFound.visibility = View.VISIBLE
+                        myContainer.setVisibility = false
+                        myProgressbar.setVisibility = false
+                        lottieNotFound.setVisibility = true
                     }
                 }
             }

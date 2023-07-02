@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.locotodevteam.seprecempresas.isNetworkConnected
-import com.locotodevteam.seprecempresas.retrofit.ConnectionResult
+import com.locotodevteam.seprecempresas.retrofit.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,7 +20,7 @@ class SearchViewModel @Inject constructor(
 ) : ViewModel() {
 
     var searchCompany = MutableLiveData<String>()
-    var companyResult = MutableLiveData<ConnectionResult>()
+    var companyResult = MutableLiveData<NetworkResult>()
 
     init {
         searchCompany("ypfb")

@@ -54,11 +54,7 @@ class MainActivity : AppCompatActivity(), ConnectivityBroadcast.ConnectivityCall
     }
 
     override fun onNetworkConnectionChanged(isConnected: Boolean) {
-        mainBinding.connectivityCardView.visibility = if (isConnected) {
-            android.view.View.GONE
-        } else {
-            android.view.View.VISIBLE
-        }
+        mainBinding.connectivityCardView.setVisibility = isConnected
     }
 
 }
