@@ -10,7 +10,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.locotodevteam.seprecempresas.broadcaster.ConnectivityBroadcast
 import com.locotodevteam.seprecempresas.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import hilt_aggregated_deps._com_locotodevteam_seprecempresas_view_search_SearchViewModel_HiltModules_BindsModule
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), ConnectivityBroadcast.ConnectivityCallback {
@@ -23,6 +22,10 @@ class MainActivity : AppCompatActivity(), ConnectivityBroadcast.ConnectivityCall
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
         initBottomNavigationView()
+    }
+
+    override fun onResume() {
+        super.onResume()
         initBroadCastReceiver()
     }
 
@@ -51,11 +54,7 @@ class MainActivity : AppCompatActivity(), ConnectivityBroadcast.ConnectivityCall
     }
 
     override fun onNetworkConnectionChanged(isConnected: Boolean) {
-        mainBinding.connectivityCardView.visibility = if (isConnected) {
-            android.view.View.GONE
-        } else {
-            android.view.View.VISIBLE
-        }
+        mainBinding.connectivityCardView.setVisibility = isConnected
     }
 
 }

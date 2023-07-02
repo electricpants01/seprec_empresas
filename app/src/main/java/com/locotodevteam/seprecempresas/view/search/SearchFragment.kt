@@ -14,8 +14,9 @@ import com.locotodevteam.seprecempresas.R
 import com.locotodevteam.seprecempresas.adapter.CompanyAdapter
 import com.locotodevteam.seprecempresas.databinding.FragmentSearchBinding
 import com.locotodevteam.seprecempresas.model.Company
-import com.locotodevteam.seprecempresas.retrofit.ConnectionResult
+import com.locotodevteam.seprecempresas.retrofit.NetworkResult
 import com.locotodevteam.seprecempresas.view.MainActivity
+import com.locotodevteam.seprecempresas.view.setVisibility
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -65,11 +66,23 @@ class SearchFragment : Fragment(), CompanyAdapter.OnItemClickListener {
     private fun initSubscriptions() {
         searchViewModel.companyResult.observe(viewLifecycleOwner) { result ->
             when (result) {
-                is ConnectionResult.NetworkSuccess<*> -> {
+                is NetworkResult.NetworkEmptyResult<*> -> {
+                    adapter.updateList(emptyList())
+                    searchBinding.lottieNotFound.setVisibility = true
+                    searchBinding.lottieNotFound.setAnimation(R.raw.not_found2)
+                    Snackbar.make(requireView(), R.string.company_search_not_found, Snackbar.LENGTH_SHORT).apply {
+                        anchorView = (activity as MainActivity).mainBinding.myBottomNavView
+                        show()
+                    }
+                }
+                is NetworkResult.NetworkSuccess<*> -> {
+                    searchBinding.lottieNotFound.setVisibility = false
                     val data = result.data as Company?
                     adapter.updateList(data?.datos?.filas as List<Company.Datos.Fila>?)
                 }
-                is ConnectionResult.NetworkFailure -> {
+                is NetworkResult.NetworkFailure -> {
+                    searchBinding.lottieNotFound.setVisibility = true
+                    searchBinding.lottieNotFound.setAnimation(R.raw.not_found2)
                     Snackbar.make(requireView(), result.message, Snackbar.LENGTH_SHORT).apply {
                         setAnchorView((activity as MainActivity).mainBinding.myBottomNavView)
                         show()

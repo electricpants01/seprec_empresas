@@ -1,24 +1,26 @@
 package com.locotodevteam.seprecempresas.view.search
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.locotodevteam.seprecempresas.retrofit.CompanyService
-import com.locotodevteam.seprecempresas.retrofit.ConnectionResult
+import com.locotodevteam.seprecempresas.isNetworkConnected
+import com.locotodevteam.seprecempresas.retrofit.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.net.UnknownHostException
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val companyService: CompanyService
+    private val context: Context,
+    private val searchNetworkRepository: SearchNetworkRepository,
+    private val searchDatabaseRepository: SearchDatabaseRepository
 ) : ViewModel() {
 
     var searchCompany = MutableLiveData<String>()
-    var companyResult = MutableLiveData<ConnectionResult>()
+    var companyResult = MutableLiveData<NetworkResult>()
 
     init {
         searchCompany("ypfb")
@@ -27,26 +29,12 @@ class SearchViewModel @Inject constructor(
     fun searchCompany(company: String) {
         searchCompany.value = company
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                    val response = companyService.getCompany(company)
-                    if (response?.isSuccessful == true) {
-                        val body = response?.body()
-                        body.let { body ->
-                            withContext(Dispatchers.Main) {
-                                companyResult.value = ConnectionResult.NetworkSuccess(body)
-                            }
-                        }
-                    } else {
-                        withContext(Dispatchers.Main){
-                            companyResult.value =
-                                ConnectionResult.NetworkFailure("No se encontró la empresa")
-                        }
-                }
-            } catch (e: UnknownHostException) {
-                withContext(Dispatchers.Main){
-                    companyResult.value =
-                        ConnectionResult.NetworkFailure("No hay conexión a internet")
-                }
+            val result = if (context.isNetworkConnected())
+                searchNetworkRepository.searchCompany(company) else searchDatabaseRepository.searchCompany(
+                company
+            )
+            withContext(Dispatchers.Main) {
+                companyResult.value = result
             }
         }
     }

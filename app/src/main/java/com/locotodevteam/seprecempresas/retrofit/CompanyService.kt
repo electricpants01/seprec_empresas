@@ -14,7 +14,7 @@ interface CompanyService {
         @Query("filtro") searchCompany: String,
         @Query("limite") limit: String = "100",
         @Query("pagina") pagina: String = "1"
-    ): Response<Company>?
+    ): Response<Company>
 
     @GET("api/empresas/informacionDirectorioEmpresa/{companyId}/establecimiento/{companyId}")
     suspend fun getCompanyDetail(@Path("companyId") companyId: String): Response<CompanyDetail>
