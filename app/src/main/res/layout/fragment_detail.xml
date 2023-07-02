@@ -16,9 +16,10 @@
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottieNotFound"
             android:layout_width="wrap_content"
-            android:visibility="gone"
             android:layout_height="wrap_content"
             app:lottie_rawRes="@raw/not_found2"
+            android:visibility="gone"
+            tools:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:lottie_autoPlay="true"
@@ -39,6 +40,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/myContainer"
             android:visibility="gone"
+            tools:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"

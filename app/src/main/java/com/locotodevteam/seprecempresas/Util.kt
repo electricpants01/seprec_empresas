@@ -4,8 +4,6 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import com.google.android.material.snackbar.Snackbar
-import com.locotodevteam.seprecempresas.view.MainActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
