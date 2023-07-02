@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity(), ConnectivityBroadcast.ConnectivityCall
     }
 
     override fun onNetworkConnectionChanged(isConnected: Boolean) {
-        mainBinding.connectivityCardView.setVisibility = isConnected
+        mainBinding.connectivityCardView.setVisibility = !isConnected
     }
 
 }
