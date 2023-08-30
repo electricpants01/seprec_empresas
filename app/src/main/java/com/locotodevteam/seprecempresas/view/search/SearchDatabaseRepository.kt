@@ -13,9 +13,9 @@ class SearchDatabaseRepository @Inject constructor(
     private val companyDao: CompanyDao
 ) {
 
-    fun insertAllCompanies(companies: Company) {
-        val companiesEntity = companies.toCompanyEntity()
-        companyDao.insertAll(companiesEntity)
+    suspend fun insertAllCompanies(companies: Company) {
+        val companiesEntity = companies.toCompanyEntity().orEmpty()
+        companyDao.insertOrReplace(entities = companiesEntity)
     }
 
     fun getAllCompanies(): List<CompanyEntity> {

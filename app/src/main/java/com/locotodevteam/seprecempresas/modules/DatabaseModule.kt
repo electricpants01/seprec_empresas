@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import com.locotodevteam.seprecempresas.room.SeprecDatabase
+import com.locotodevteam.seprecempresas.room.dao.ApiTimestampDao
 import com.locotodevteam.seprecempresas.room.dao.CompanyDao
 import com.locotodevteam.seprecempresas.view.search.SearchDatabaseRepository
 import dagger.Module
@@ -25,17 +26,22 @@ object DatabaseModule {
     @Singleton
     @Provides
     fun providesRoomDatabase(context: Context): SeprecDatabase {
-        val db = Room.databaseBuilder(
-            context,
-            SeprecDatabase::class.java,
-            "seprec_database"
+        return Room.databaseBuilder(
+            context = context,
+            klass = SeprecDatabase::class.java,
+            name = SeprecDatabase.DATABASE_NAME
+        ).addMigrations(
+            SeprecDatabase.MIGRATION_1_2
         ).build()
-        return db
     }
 
     @Singleton
     @Provides
     fun providesCompanyDao(db: SeprecDatabase): CompanyDao = db.companyDao()
+
+    @Singleton
+    @Provides
+    fun providesApiTimestampDao(db: SeprecDatabase): ApiTimestampDao = db.apiTimestampDao()
 
     @Singleton
     @Provides

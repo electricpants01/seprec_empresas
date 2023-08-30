@@ -19,7 +19,7 @@ class SearchViewModel @Inject constructor(
     private val searchDatabaseRepository: SearchDatabaseRepository
 ) : ViewModel() {
 
-    var searchCompany = MutableLiveData<String>()
+    private var searchCompany = MutableLiveData<String>()
     var companyResult = MutableLiveData<NetworkResult>()
 
     init {
