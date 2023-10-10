@@ -4,17 +4,11 @@ import androidx.room.*
 import com.locotodevteam.seprecempresas.room.entity.CompanyEntity
 
 @Dao
-interface CompanyDao {
+abstract class CompanyDao: UtilDao<CompanyEntity> {
 
     @Query("SELECT * FROM company")
-    fun getAll(): List<CompanyEntity>
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(company: CompanyEntity)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(companies: List<CompanyEntity>?)
+    abstract fun getAll(): List<CompanyEntity>
 
     @Query("SELECT * FROM company WHERE razonSocial LIKE '%' || :companyName || '%'")
-    fun searchCompany(companyName: String): List<CompanyEntity>
+    abstract fun searchCompany(companyName: String): List<CompanyEntity>
 }

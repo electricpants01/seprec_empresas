@@ -19,6 +19,11 @@ android {
     compileSdk 33
 
     defaultConfig {
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
         applicationId "com.locotodevteam.seprecempresas"
         minSdk 26
         targetSdk 33

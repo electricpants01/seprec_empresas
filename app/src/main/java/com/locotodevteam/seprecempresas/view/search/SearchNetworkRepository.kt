@@ -16,6 +16,8 @@ class SearchNetworkRepository @Inject constructor(
         return try {
             val response = companyService.getCompany(companyName)
             if (response.isSuccessful) {
+                val url = response.raw().request.url.toString()
+
                 val body = response.body()
                 body.let { body ->
                     if (body?.datos?.filas?.isNullOrEmpty() == true) {
