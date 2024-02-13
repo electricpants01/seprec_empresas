@@ -50,7 +50,6 @@ fun HomeListScreen(
                 .fillMaxSize()
                 .padding(top = 12.dp)
         ) {
-            println("chris tienes ${companyList.datos?.filas?.size} empresas")
             items(companyList.datos?.filas?.size ?: 0) { index ->
                 val company = companyList.datos?.filas?.get(index)
                 company?.let {

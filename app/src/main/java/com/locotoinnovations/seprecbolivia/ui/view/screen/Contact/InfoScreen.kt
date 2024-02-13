@@ -32,6 +32,7 @@ fun InfoScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
+            modifier = Modifier.padding(horizontal = 96.dp),
             fontWeight = FontWeight.Bold,
             fontSize = 36.sp,
             textAlign = TextAlign.Center,
