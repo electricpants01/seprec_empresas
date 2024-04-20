@@ -45,13 +45,13 @@ fun CompanyCard(
                     horizontalArrangement = Arrangement.Start
                 ) {
                     Text(
-                        modifier = Modifier.weight(3/12f),
+                        modifier = Modifier.weight(3 / 12f),
                         text = it.title,
                         fontWeight = FontWeight.Bold
                     )
-                    Spacer(modifier = Modifier.weight(1/12f))
+                    Spacer(modifier = Modifier.weight(1 / 12f))
                     Text(
-                        modifier = Modifier.weight(8/12f),
+                        modifier = Modifier.weight(8 / 12f),
                         text = it.content,
                         color = Color.Black
                     )

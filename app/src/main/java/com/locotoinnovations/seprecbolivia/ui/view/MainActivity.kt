@@ -94,7 +94,14 @@ class MainActivity : ComponentActivity() {
                     startDestination = "search",
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(paddingValues = if(!isTablet) it else PaddingValues(0.dp, 0.dp, 0.dp, 56.dp))
+                        .padding(
+                            paddingValues = if (!isTablet) it else PaddingValues(
+                                0.dp,
+                                0.dp,
+                                0.dp,
+                                56.dp
+                            )
+                        )
                         .padding(
                             start = if (isTablet) 80.dp else 0.dp,
                             top = if (isTablet) 72.dp else 0.dp

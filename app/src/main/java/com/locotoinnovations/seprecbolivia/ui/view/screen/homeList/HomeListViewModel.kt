@@ -16,14 +16,16 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeListViewModel @Inject constructor(
     private val companyRepository: CompanyRepository,
-): ViewModel() {
+) : ViewModel() {
 
     private val _event = MutableStateFlow<HomeListEvent?>(null)
     private val _companyList: MutableStateFlow<Company> = MutableStateFlow(Company.empty())
     val companyList = _companyList.asStateFlow()
+
     // first state the user is searching
     private val _isSearching = MutableStateFlow(false)
     val isSearching = _isSearching.asStateFlow()
+
     //second state the text typed by the user
     private val _searchText = MutableStateFlow("")
     val searchText = _searchText.asStateFlow()
@@ -36,14 +38,16 @@ class HomeListViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val result = companyRepository.getCompany(searchCompanyText)
             withContext(Dispatchers.Main) {
-                when(result) {
+                when (result) {
                     is NetworkResult.NetworkSuccess<*> -> {
                         // emit company list
                         _companyList.value = result.data as Company
                     }
+
                     is NetworkResult.NetworkEmptyResult<*> -> {
                         _event.emit(HomeListEvent.ShowError("No company found"))
                     }
+
                     is NetworkResult.NetworkFailure -> {
                         _event.emit(HomeListEvent.ShowError("Network error"))
                     }

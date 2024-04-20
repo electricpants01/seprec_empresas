@@ -24,13 +24,13 @@ import androidx.compose.ui.unit.dp
 fun BottomNavigationBar(
     selectedItemIndex: Int,
     onSelectedItemIndexChange: (Int) -> Unit
-){
+) {
     NavigationBar {
         bottomNavItems.forEachIndexed { index, bottomNavItem ->
             NavigationBarItem(
                 icon = {
                     BadgedBox(badge = {
-                       // no badge
+                        // no badge
                     }) {
                         Icon(
                             imageVector = if (selectedItemIndex == index) {

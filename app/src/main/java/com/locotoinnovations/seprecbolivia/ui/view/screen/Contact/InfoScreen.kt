@@ -46,9 +46,13 @@ fun InfoScreen() {
             text = stringResource(id = R.string.author)
         )
         Spacer(modifier = Modifier.padding(vertical = 8.dp))
-        ClickableText(text = AnnotatedString(text = stringResource(id = R.string.website), spanStyle = SpanStyle(color = Color.Blue, fontSize = 24.sp)), onClick = {
-            // open a browser
-            uriHandler.openUri("https://locotoinnovations.com")
-        })
+        ClickableText(
+            text = AnnotatedString(
+                text = stringResource(id = R.string.website),
+                spanStyle = SpanStyle(color = Color.Blue, fontSize = 24.sp)
+            ), onClick = {
+                // open a browser
+                uriHandler.openUri("https://locotoinnovations.com")
+            })
     }
 }

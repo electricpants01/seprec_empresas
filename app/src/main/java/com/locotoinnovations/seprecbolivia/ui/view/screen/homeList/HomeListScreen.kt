@@ -29,7 +29,8 @@ fun HomeListScreen(
     val searchText by homeListViewModel.searchText.collectAsState()
 
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
             .padding(horizontal = 12.dp)
     ) {
         OutlinedTextField(

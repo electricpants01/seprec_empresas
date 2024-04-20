@@ -15,27 +15,31 @@ import javax.inject.Inject
 @HiltViewModel
 class TramiteViewModel @Inject constructor(
     private val tramiteRepository: CompanyRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val _tramiteDetail = MutableStateFlow(TramiteDetail.empty())
     val tramiteDetail = _tramiteDetail.asStateFlow()
+
     // user searchText
     private val _searchText = MutableStateFlow("")
     val searchText = _searchText.asStateFlow()
+
     // events for tramite
     private val _tramiteEvent = MutableStateFlow<TramiteEvent?>(null)
     val tramiteEvent = _tramiteEvent.asStateFlow()
 
     fun getTramiteDetail(tramiteId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            when(val response = tramiteRepository.getTramiteDetail(tramiteId = tramiteId)) {
+            when (val response = tramiteRepository.getTramiteDetail(tramiteId = tramiteId)) {
                 is NetworkResult.NetworkSuccess<*> -> {
                     val tramiteDetail = response.data as TramiteDetail
                     _tramiteDetail.value = tramiteDetail
                 }
+
                 is NetworkResult.NetworkEmptyResult<*> -> {
                     _tramiteEvent.value = TramiteEvent.OnTramiteEmptyData
                 }
+
                 is NetworkResult.NetworkFailure -> {
                     _tramiteEvent.value = TramiteEvent.OnFetchTramiteDetailFail
                 }
@@ -49,7 +53,7 @@ class TramiteViewModel @Inject constructor(
     }
 
     sealed class TramiteEvent {
-        object OnTramiteEmptyData: TramiteEvent()
-        object OnFetchTramiteDetailFail: TramiteEvent()
+        object OnTramiteEmptyData : TramiteEvent()
+        object OnFetchTramiteDetailFail : TramiteEvent()
     }
 }

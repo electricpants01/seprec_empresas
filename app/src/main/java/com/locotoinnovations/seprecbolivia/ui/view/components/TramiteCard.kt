@@ -21,7 +21,7 @@ fun TramiteCard(
     nombre: String,
     fechaIngreso: String,
     fechaTramite: String,
-){
+) {
 
     val tramiteDetailList = listOf<TramiteCardData>(
         TramiteCardData(title = "Matricula", content = matricula.trim()),
@@ -30,14 +30,16 @@ fun TramiteCard(
         TramiteCardData(title = "Estado de tramite", content = fechaTramite.trim()),
     )
 
-    OutlinedCard{
+    OutlinedCard {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp)
         ) {
             Text(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 text = title
@@ -52,12 +54,14 @@ fun TramiteCard(
                             horizontalArrangement = Arrangement.Start
                         ) {
                             Text(
-                                modifier = Modifier.weight(6/12f),
+                                modifier = Modifier.weight(6 / 12f),
                                 fontWeight = FontWeight.Bold,
-                                text = tramiteCardData.title)
+                                text = tramiteCardData.title
+                            )
                             Text(
-                                modifier = Modifier.weight(6/12f),
-                                text = tramiteCardData.content)
+                                modifier = Modifier.weight(6 / 12f),
+                                text = tramiteCardData.content
+                            )
                         }
                     }
                 }

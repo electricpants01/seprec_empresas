@@ -76,7 +76,8 @@ fun TramiteScreen(
                     it?.operacion.orEmpty(),
                     it?.fecha?.toDate()?.formatDate().orEmpty()
                 )
-            }?.let { tramiteTrackDataList -> TramiteTrackCard(tramiteTrackList = tramiteTrackDataList) }
+            }
+                ?.let { tramiteTrackDataList -> TramiteTrackCard(tramiteTrackList = tramiteTrackDataList) }
         }
 
     }

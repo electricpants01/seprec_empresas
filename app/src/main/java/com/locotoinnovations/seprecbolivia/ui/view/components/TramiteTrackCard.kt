@@ -20,14 +20,16 @@ import com.locotoinnovations.seprecbolivia.R
 fun TramiteTrackCard(
     tramiteTrackList: List<TramiteTrackCardData>
 ) {
-    OutlinedCard{
+    OutlinedCard {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp)
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
             ) {
                 Text(
                     modifier = Modifier
@@ -56,13 +58,15 @@ fun TramiteTrackCard(
                             horizontalArrangement = Arrangement.Center
                         ) {
                             Text(
-                                modifier = Modifier.weight(1/2f),
+                                modifier = Modifier.weight(1 / 2f),
                                 textAlign = TextAlign.Center,
-                                text = track.estado)
+                                text = track.estado
+                            )
                             Text(
-                                modifier = Modifier.weight(1/2f),
+                                modifier = Modifier.weight(1 / 2f),
                                 textAlign = TextAlign.Center,
-                                text = track.fechaEstado)
+                                text = track.fechaEstado
+                            )
                         }
                     }
                 }

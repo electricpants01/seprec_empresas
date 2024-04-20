@@ -19,10 +19,19 @@ internal sealed class BottomNavItem(
     val selectedIcon: ImageVector,
     @StringRes val label: Int
 ) {
-    object Home : BottomNavItem("search", Icons.Outlined.Search,Icons.Filled.Search, R.string.home)
-    object Search : BottomNavItem("tramite", Icons.Outlined.AccountBox,Icons.Filled.AccountBox, R.string.tramite)
-    object SeprecMap : BottomNavItem("map", Icons.Outlined.LocationOn,Icons.Filled.LocationOn, R.string.map)
-    object Me : BottomNavItem("me", Icons.Outlined.AccountCircle,Icons.Filled.AccountCircle, R.string.info)
+    object Home : BottomNavItem("search", Icons.Outlined.Search, Icons.Filled.Search, R.string.home)
+    object Search : BottomNavItem(
+        "tramite",
+        Icons.Outlined.AccountBox,
+        Icons.Filled.AccountBox,
+        R.string.tramite
+    )
+
+    object SeprecMap :
+        BottomNavItem("map", Icons.Outlined.LocationOn, Icons.Filled.LocationOn, R.string.map)
+
+    object Me :
+        BottomNavItem("me", Icons.Outlined.AccountCircle, Icons.Filled.AccountCircle, R.string.info)
 }
 
 internal val bottomNavItems = listOf(
