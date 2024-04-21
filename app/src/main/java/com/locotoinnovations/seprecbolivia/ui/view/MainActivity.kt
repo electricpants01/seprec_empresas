@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -32,7 +31,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.locotoinnovations.seprecbolivia.R
 import com.locotoinnovations.seprecbolivia.ui.theme.SeprecBoliviaTheme
-import com.locotoinnovations.seprecbolivia.ui.view.bottomNav.BottomNavItem
 import com.locotoinnovations.seprecbolivia.ui.view.bottomNav.BottomNavigationBar
 import com.locotoinnovations.seprecbolivia.ui.view.bottomNav.BottomNavigationRailBar
 import com.locotoinnovations.seprecbolivia.ui.view.bottomNav.bottomNavItems
