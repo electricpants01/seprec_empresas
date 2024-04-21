@@ -1,11 +1,16 @@
 package com.locotoinnovations.seprecbolivia.ui.view.screen.homeListDetail
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
 import com.locotoinnovations.core.model.CompanyDetail
 import com.locotoinnovations.seprecbolivia.ui.view.components.CompanyDetailCard
 
@@ -24,18 +29,47 @@ fun HomeListDetail(
     LazyColumn {
         item {
             companyDetail.datos?.let {
-                Text(text = companyDetail.datos?.razonSocial.orEmpty())
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    text = it.razonSocial.orEmpty()
+                )
                 CompanyDetailCard(
                     matriculaComercio = it.matricula.orEmpty(),
                     matriculaAnterior = it.matriculaAnterior.orEmpty(),
                     estado = it.estado.orEmpty(),
-                    actividad = it.objetos_sociales?.detailListToString().orEmpty(),
+                    actividad = it.objetos_sociales?.joinToString(
+                        separator = "\n",
+                    ) {
+                        it?.let {
+                            "✔ ${it.objetoSocial}"
+                        }.orEmpty()
+                    }.orEmpty(),
                     tipoDeSocietario = it.codTipoUnidadEconomica?.nombre.orEmpty(),
-                    domicilio = it.direccion?.domicilio.orEmpty().plus(" ")
+                    domicilio = it.direccion?.domicilio.orEmpty().plus(": ")
                         .plus(it.direccion?.direccionCompleta.orEmpty()),
-                    contacto = it.contactos?.descripcion?.detailListToString().orEmpty(),
-                    correo = it.correos?.descripcion?.detailListToString().orEmpty(),
-                    actividadesEconomicas = it.actividadesEconomicas?.detailListToString().orEmpty()
+                    contacto = it.contactos?.descripcion?.joinToString(
+                        separator = "\n",
+                    ) {
+                        it?.let {
+                            "✔ ${it.tipo.orEmpty()}: ${it.numero}"
+                        }.orEmpty()
+                    }.orEmpty(),
+                    correo = it.correos?.descripcion?.joinToString(
+                        separator = "\n",
+                    ) {
+                        it?.let {
+                            "✔ ${it.tipo.orEmpty()}: ${it.correo.orEmpty()}"
+                        }.orEmpty()
+                    }
+                        .orEmpty(),
+                    actividadesEconomicas = it.actividadesEconomicas?.joinToString {
+                        it?.joinToString(
+                            separator = "\n",
+                        ) { it?.let { "✔ ${it.descripcion}" }.orEmpty() }.orEmpty()
+                    }.orEmpty(),
                 )
 
             }
