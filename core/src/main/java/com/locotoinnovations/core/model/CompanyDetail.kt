@@ -5,6 +5,11 @@ data class CompanyDetail(
     val finalizado: Boolean?,
     val mensaje: String?
 ) {
+
+    companion object {
+        fun empty() = CompanyDetail(null, false, "")
+    }
+
     data class Datos(
         val actividadesEconomicas: List<List<ActividadesEconomica?>?>?,
         val codEstadoActualizacion: CodEstadoActualizacion?,

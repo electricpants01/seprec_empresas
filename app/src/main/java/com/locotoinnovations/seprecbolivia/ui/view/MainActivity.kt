@@ -40,6 +40,7 @@ import com.locotoinnovations.seprecbolivia.ui.view.screen.Tramite.TramiteViewMod
 import com.locotoinnovations.seprecbolivia.ui.view.screen.homeList.HomeListScreen
 import com.locotoinnovations.seprecbolivia.ui.view.screen.homeList.HomeListViewModel
 import com.locotoinnovations.seprecbolivia.ui.view.screen.homeListDetail.HomeListDetail
+import com.locotoinnovations.seprecbolivia.ui.view.screen.homeListDetail.HomeListDetailViewModel
 import com.locotoinnovations.seprecbolivia.ui.view.screen.map.SeprecMapScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -68,6 +69,7 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             val homeListViewModel: HomeListViewModel by viewModels()
             val tramiteViewModel: TramiteViewModel by viewModels()
+            val homeListDetailViewModel: HomeListDetailViewModel by viewModels()
             //
             val windowClass = calculateWindowSizeClass(activity = this)
             val isTablet = windowClass.widthSizeClass != WindowWidthSizeClass.Compact
@@ -127,7 +129,8 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(
-                        ARG_NAVIGATION_TRAMITE) {
+                        ARG_NAVIGATION_TRAMITE
+                    ) {
                         TramiteScreen(tramiteViewModel = tramiteViewModel)
                     }
                     composable(ARG_NAVIGATION_MAP) {
@@ -145,7 +148,10 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                     ) { entry ->
-                        HomeListDetail(entry.arguments?.getString(ARG_NAVIGATION_SEARCH_ID).orEmpty())
+                        HomeListDetail(
+                            homeListDetailViewModel = homeListDetailViewModel,
+                            id = entry.arguments?.getString(ARG_NAVIGATION_SEARCH_ID).orEmpty()
+                        )
                     }
                 }
             }

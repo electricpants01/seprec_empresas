@@ -57,7 +57,6 @@ class HomeListViewModel @Inject constructor(
     }
 
     fun onSearchTextChange(text: String) {
-        println("chris text ${text}")
         _searchText.value = text
         getCompanyList(text)
     }
