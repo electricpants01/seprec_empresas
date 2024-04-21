@@ -32,7 +32,6 @@ class HomeListDetailViewModel @Inject constructor(
                 when (result) {
                     is NetworkResult.NetworkSuccess<*> -> {
                         _companyDetail.value = result.data as CompanyDetail
-                        _event.emit(HomeListDetailEvent.DetailNotFound("No company detail found"))
                     }
 
                     is NetworkResult.NetworkEmptyResult<*> -> {
