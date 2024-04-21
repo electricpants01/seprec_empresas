@@ -17,13 +17,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.locotoinnovations.core.model.Company
 import com.locotoinnovations.seprecbolivia.R
+import com.locotoinnovations.seprecbolivia.ui.view.MainActivity
 import com.locotoinnovations.seprecbolivia.ui.view.components.CompanyCard
 
 @Composable
 fun HomeListScreen(
-    homeListViewModel: HomeListViewModel
+    homeListViewModel: HomeListViewModel,
+    navController: NavController,
 ) {
     val companyList by homeListViewModel.companyList.collectAsState(initial = Company.empty())
     val searchText by homeListViewModel.searchText.collectAsState()
@@ -60,6 +64,10 @@ fun HomeListScreen(
                         matricula = "temp",
                         estado = it.codEstadoActualizacion?.nombre.orEmpty(),
                         id = it.id.orEmpty(),
+                        onCardTapped = {
+                            println("chris tapped ${it.id}")
+                            navController.navigate("${MainActivity.ARG_NAVIGATION_SEARCH_DETAIL}/${it.id.orEmpty()}")
+                        }
                     )
                     Spacer(modifier = Modifier.padding(4.dp))
                 }

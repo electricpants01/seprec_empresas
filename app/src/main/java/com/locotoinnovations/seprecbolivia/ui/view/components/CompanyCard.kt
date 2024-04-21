@@ -1,5 +1,6 @@
 package com.locotoinnovations.seprecbolivia.ui.view.components
 
+import android.service.autofill.OnClickAction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,7 +22,8 @@ fun CompanyCard(
     direccion: String,
     matricula: String,
     estado: String,
-    id: String
+    id: String,
+    onCardTapped: () -> Unit = {}
 ) {
     val titleList = listOf<CompanyCardData>(
         CompanyCardData(title = "Razón Social", content = razonSocial.trim()),
@@ -31,6 +33,7 @@ fun CompanyCard(
         CompanyCardData(title = "ID", content = id.trim()),
     )
     OutlinedCard(
+        onClick = onCardTapped,
     ) {
         Column(
             modifier = Modifier

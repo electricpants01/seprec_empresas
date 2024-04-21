@@ -24,11 +24,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.locotoinnovations.seprecbolivia.R
 import com.locotoinnovations.seprecbolivia.ui.theme.SeprecBoliviaTheme
+import com.locotoinnovations.seprecbolivia.ui.view.bottomNav.BottomNavItem
 import com.locotoinnovations.seprecbolivia.ui.view.bottomNav.BottomNavigationBar
 import com.locotoinnovations.seprecbolivia.ui.view.bottomNav.BottomNavigationRailBar
 import com.locotoinnovations.seprecbolivia.ui.view.bottomNav.bottomNavItems
@@ -37,6 +41,7 @@ import com.locotoinnovations.seprecbolivia.ui.view.screen.Tramite.TramiteScreen
 import com.locotoinnovations.seprecbolivia.ui.view.screen.Tramite.TramiteViewModel
 import com.locotoinnovations.seprecbolivia.ui.view.screen.homeList.HomeListScreen
 import com.locotoinnovations.seprecbolivia.ui.view.screen.homeList.HomeListViewModel
+import com.locotoinnovations.seprecbolivia.ui.view.screen.homeListDetail.HomeListDetail
 import com.locotoinnovations.seprecbolivia.ui.view.screen.map.SeprecMapScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -44,6 +49,16 @@ import dagger.hilt.android.AndroidEntryPoint
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    companion object {
+        private const val ARG_NAVIGATION_SEARCH = "search"
+        private const val ARG_NAVIGATION_TRAMITE = "tramite"
+        private const val ARG_NAVIGATION_MAP = "map"
+        private const val ARG_NAVIGATION_ME = "me"
+        const val ARG_NAVIGATION_SEARCH_DETAIL = "search_detail"
+        private const val ARG_NAVIGATION_SEARCH_ID = "id"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -52,7 +67,7 @@ class MainActivity : ComponentActivity() {
             var selectedItemIndex by rememberSaveable {
                 mutableIntStateOf(0)
             }
-            var navController = rememberNavController()
+            val navController = rememberNavController()
             val homeListViewModel: HomeListViewModel by viewModels()
             val tramiteViewModel: TramiteViewModel by viewModels()
             //
@@ -91,7 +106,7 @@ class MainActivity : ComponentActivity() {
             ) {
                 NavHost(
                     navController = navController,
-                    startDestination = "search",
+                    startDestination = ARG_NAVIGATION_SEARCH,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(
@@ -107,17 +122,32 @@ class MainActivity : ComponentActivity() {
                             top = if (isTablet) 72.dp else 0.dp
                         )
                 ) {
-                    composable("search") {
-                        HomeListScreen(homeListViewModel = homeListViewModel)
+                    composable(ARG_NAVIGATION_SEARCH) {
+                        HomeListScreen(
+                            homeListViewModel = homeListViewModel,
+                            navController = navController
+                        )
                     }
-                    composable("tramite") {
+                    composable(
+                        ARG_NAVIGATION_TRAMITE) {
                         TramiteScreen(tramiteViewModel = tramiteViewModel)
                     }
-                    composable("map") {
+                    composable(ARG_NAVIGATION_MAP) {
                         SeprecMapScreen()
                     }
-                    composable("me") {
+                    composable(ARG_NAVIGATION_ME) {
                         InfoScreen()
+                    }
+                    composable(
+                        route = "${ARG_NAVIGATION_SEARCH_DETAIL}/{${ARG_NAVIGATION_SEARCH_ID}}",
+                        arguments = listOf(
+                            navArgument(ARG_NAVIGATION_SEARCH_ID) {
+                                type = NavType.StringType
+                                nullable = false
+                            }
+                        )
+                    ) { entry ->
+                        HomeListDetail(entry.arguments?.getString(ARG_NAVIGATION_SEARCH_ID).orEmpty())
                     }
                 }
             }
