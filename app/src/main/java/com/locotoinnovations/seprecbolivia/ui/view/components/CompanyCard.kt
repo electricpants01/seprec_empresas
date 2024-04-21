@@ -21,7 +21,8 @@ fun CompanyCard(
     direccion: String,
     matricula: String,
     estado: String,
-    id: String
+    id: String,
+    onCardTapped: () -> Unit = {}
 ) {
     val titleList = listOf<CompanyCardData>(
         CompanyCardData(title = "Razón Social", content = razonSocial.trim()),
@@ -31,6 +32,7 @@ fun CompanyCard(
         CompanyCardData(title = "ID", content = id.trim()),
     )
     OutlinedCard(
+        onClick = onCardTapped,
     ) {
         Column(
             modifier = Modifier
