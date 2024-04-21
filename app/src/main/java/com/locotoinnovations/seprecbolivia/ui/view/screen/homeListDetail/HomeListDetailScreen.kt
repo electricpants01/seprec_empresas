@@ -1,5 +1,7 @@
 package com.locotoinnovations.seprecbolivia.ui.view.screen.homeListDetail
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
@@ -8,11 +10,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.locotoinnovations.core.model.CompanyDetail
 import com.locotoinnovations.seprecbolivia.ui.view.components.CompanyDetailCard
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun HomeListDetail(
@@ -24,7 +28,26 @@ fun HomeListDetail(
         homeListDetailViewModel.getCompanyDetail(id)
     }
 
+    val context: Context = LocalContext.current
     val companyDetail by homeListDetailViewModel.companyDetail.collectAsState(CompanyDetail.empty())
+
+    LaunchedEffect(homeListDetailViewModel.event) {
+        homeListDetailViewModel.event.collectLatest { event ->
+            when (event) {
+                is HomeListDetailViewModel.HomeListDetailEvent.DetailNotFound -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+                is HomeListDetailViewModel.HomeListDetailEvent.NetworkError -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+
+                null -> {
+                    // no-op
+                }
+            }
+        }
+
+    }
 
     LazyColumn {
         item {

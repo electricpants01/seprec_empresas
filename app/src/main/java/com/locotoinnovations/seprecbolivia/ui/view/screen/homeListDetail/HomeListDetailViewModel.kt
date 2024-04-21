@@ -22,26 +22,34 @@ class HomeListDetailViewModel @Inject constructor(
     private val _companyDetail = MutableStateFlow(CompanyDetail.empty())
     val companyDetail: StateFlow<CompanyDetail> = _companyDetail.asStateFlow()
 
+    private val _event = MutableStateFlow<HomeListDetailEvent?>(null)
+    val event: StateFlow<HomeListDetailEvent?> = _event.asStateFlow()
+
     fun getCompanyDetail(companyId: String) {
         viewModelScope.launch {
             val result = companyRepository.getCompanyDetail(companyId = companyId)
             withContext(Dispatchers.Main) {
                 when (result) {
                     is NetworkResult.NetworkSuccess<*> -> {
-                        // emit company list
                         _companyDetail.value = result.data as CompanyDetail
+                        _event.emit(HomeListDetailEvent.DetailNotFound("No company detail found"))
                     }
 
                     is NetworkResult.NetworkEmptyResult<*> -> {
-//                        _event.emit(HomeListEvent.ShowError("No company found"))
+                        _event.emit(HomeListDetailEvent.DetailNotFound("No company detail found"))
                     }
 
                     is NetworkResult.NetworkFailure -> {
-//                        _event.emit(HomeListEvent.ShowError("Network error"))
+                        _event.emit(HomeListDetailEvent.NetworkError("Network error"))
                     }
                 }
 
             }
         }
+    }
+
+    sealed class HomeListDetailEvent {
+        data class DetailNotFound(val message: String) : HomeListDetailEvent()
+        data class NetworkError(val message: String) : HomeListDetailEvent()
     }
 }
