@@ -1,6 +1,12 @@
 pluginManagement {
     repositories {
-        google()
+        google {
+            content {
+                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("com\\.google.*")
+                includeGroupByRegex("androidx.*")
+            }
+        }
         mavenCentral()
         gradlePluginPortal()
     }
@@ -13,7 +19,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Seprec bolivia"
+rootProject.name = "Empresas Bolivia"
 include(":app")
 include(":app:core")
 include(":core")
