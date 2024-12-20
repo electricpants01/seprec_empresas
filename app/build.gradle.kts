@@ -8,12 +8,12 @@ plugins {
 
 android {
     namespace = "com.locotoinnovations.seprecbolivia"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.locotoinnovations.seprecbolivia"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 4
         versionName = "2.0.1"
 
