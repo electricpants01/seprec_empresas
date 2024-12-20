@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="company_search_not_found">company not found, search for another one</string>
+    <string name="company_parse_error">Error when parsing the company model</string>
+    <string name="network_error">connection error</string>
+    <string name="tramite_not_found">Folling not found</string>
+</resources>
