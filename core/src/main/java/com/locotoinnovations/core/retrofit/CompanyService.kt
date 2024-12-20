@@ -10,7 +10,7 @@ import retrofit2.http.Query
 
 
 interface CompanyService {
-    @GET("api/empresas/buscarDirectorioEmpresas")
+    @GET("api/empresas/buscarEmpresas")
     suspend fun getCompany(
         @Query("filtro") searchCompany: String,
         @Query("limite") limit: String = "100",
