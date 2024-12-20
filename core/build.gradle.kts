@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.locotoinnovations.core"
-    compileSdk = 34
+    compileSdk = 35
 
     buildFeatures {
         viewBinding = true
@@ -17,7 +17,7 @@ android {
     defaultConfig {
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments["room.schemaLocation"] = "$projectDir/schemas".toString()
+                arguments["room.schemaLocation"] = "$projectDir/schemas"
             }
         }
     }
