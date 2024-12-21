@@ -8,6 +8,69 @@ data class CompanyDetail(
 
     companion object {
         fun empty() = CompanyDetail(null, false, "")
+
+        fun sample() = CompanyDetail(
+            datos = Datos(
+                actividadesEconomicas = listOf(
+                    listOf(
+                        Datos.ActividadesEconomica(
+                            clasificador = Datos.ActividadesEconomica.Clasificador(
+                                codigo = "123",
+                                id = "1",
+                                tipo = "Primary"
+                            ),
+                            codigo = "IT001",
+                            descripcion = "Information Technology Services",
+                            id = "1001",
+                            tipo = "Service"
+                        )
+                    )
+                ),
+                codEstadoActualizacion = Datos.CodEstadoActualizacion(
+                    nombre = "Updated"
+                ),
+                codTipoUnidadEconomica = Datos.CodTipoUnidadEconomica(
+                    nombre = "Private"
+                ),
+                contactos = Datos.Contactos(
+                    descripcion = listOf(
+                        Datos.Contactos.Descripcion(
+                            numero = "123-456-789",
+                            tipo = "Phone"
+                        )
+                    ),
+                    id = "1",
+                    tipoContacto = "Primary"
+                ),
+                correos = Datos.Correos(
+                    descripcion = listOf(
+                        Datos.Correos.Descripcion(
+                            correo = "info@example.com",
+                            tipo = "Work"
+                        )
+                    ),
+                    id = "1",
+                    tipoContacto = "Primary"
+                ),
+                direccion = Datos.Direccion(
+                    direccionCompleta = "123 Main Street, City, Country",
+                    domicilio = "123 Main Street"
+                ),
+                estado = "Active",
+                id = "1234",
+                matricula = "56789",
+                matriculaAnterior = "98765",
+                nit = "100200300",
+                objetos_sociales = listOf(
+                    Datos.ObjetosSociale(
+                        objetoSocial = "Software Development"
+                    )
+                ),
+                razonSocial = "Sample Company"
+            ),
+            finalizado = true,
+            mensaje = "Data retrieved successfully"
+        )
     }
 
     data class Datos(

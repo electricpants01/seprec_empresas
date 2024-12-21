@@ -61,13 +61,6 @@ class HomeListViewModel @Inject constructor(
         getCompanyList(text)
     }
 
-    fun onToogleSearch() {
-        _isSearching.value = !_isSearching.value
-        if (!_isSearching.value) {
-            onSearchTextChange("")
-        }
-    }
-
     sealed class HomeListEvent {
         data class ShowError(val message: String) : HomeListEvent()
     }

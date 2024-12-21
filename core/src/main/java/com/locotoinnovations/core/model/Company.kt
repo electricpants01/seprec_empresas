@@ -41,5 +41,50 @@ data class Company(
             finalizado = null,
             mensaje = null
         )
+
+        fun sample() = Company(
+            datos = Datos(
+                filas = listOf(
+                    Datos.Fila(
+                        codEstadoActualizacion = Datos.Fila.CodEstadoActualizacion(
+                            id = 1,
+                            nombre = "Active"
+                        ),
+                        direccion = Datos.Fila.Direccion(
+                            codDepartamento = Datos.Fila.Direccion.CodDepartamento(
+                                id = 101,
+                                nombre = "Santa Cruz"
+                            ),
+                            id = "D001"
+                        ),
+                        estado = "Open",
+                        id = "F001",
+                        idEstablecimiento = "E001",
+                        razonSocial = "Sample Company A"
+                    ),
+                    Datos.Fila(
+                        codEstadoActualizacion = Datos.Fila.CodEstadoActualizacion(
+                            id = 2,
+                            nombre = "Inactive"
+                        ),
+                        direccion = Datos.Fila.Direccion(
+                            codDepartamento = Datos.Fila.Direccion.CodDepartamento(
+                                id = 102,
+                                nombre = "La Paz"
+                            ),
+                            id = "D002"
+                        ),
+                        estado = "Closed",
+                        id = "F002",
+                        idEstablecimiento = "E002",
+                        razonSocial = "Sample Company B"
+                    )
+                ),
+                tipoFiltro = "Sample Filter",
+                total = 2
+            ),
+            finalizado = true,
+            mensaje = "Sample message"
+        )
     }
 }
