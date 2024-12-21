@@ -13,7 +13,7 @@ interface CompanyService {
     @GET("api/empresas/buscarEmpresas")
     suspend fun getCompany(
         @Query("filtro") searchCompany: String,
-        @Query("limite") limit: String = "100",
+        @Query("limite") limit: String = "30",
         @Query("pagina") pagina: String = "1"
     ): Response<Company>
 

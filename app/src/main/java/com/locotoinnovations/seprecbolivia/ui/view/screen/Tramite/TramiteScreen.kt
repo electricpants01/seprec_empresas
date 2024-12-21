@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.locotoinnovations.core.model.TramiteDetail
 import com.locotoinnovations.seprecbolivia.R
 import com.locotoinnovations.seprecbolivia.formatDate
@@ -28,7 +29,7 @@ import com.locotoinnovations.seprecbolivia.ui.view.components.TramiteTrackCardDa
 
 @Composable
 fun TramiteScreen(
-    tramiteViewModel: TramiteViewModel
+    tramiteViewModel: TramiteViewModel = hiltViewModel(),
 ) {
 
     val tramiteDetail by tramiteViewModel.tramiteDetail.collectAsState(initial = TramiteDetail.empty())
