@@ -55,8 +55,10 @@ class MainActivity : ComponentActivity() {
         private const val ARG_NAVIGATION_MAP = "map"
         private const val ARG_NAVIGATION_ME = "me"
         const val ARG_NAVIGATION_SEARCH_DETAIL = "search_detail"
-        private const val ARG_NAVIGATION_SEARCH_ID = "id"
+        const val ARG_NAVIGATION_SEARCH_ID = "id"
     }
+
+    private val tramiteViewModel: TramiteViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,9 +69,6 @@ class MainActivity : ComponentActivity() {
                 mutableIntStateOf(0)
             }
             val navController = rememberNavController()
-            val homeListViewModel: HomeListViewModel by viewModels()
-            val tramiteViewModel: TramiteViewModel by viewModels()
-            val homeListDetailViewModel: HomeListDetailViewModel by viewModels()
             //
             val windowClass = calculateWindowSizeClass(activity = this)
             val isTablet = windowClass.widthSizeClass != WindowWidthSizeClass.Compact
@@ -124,7 +123,6 @@ class MainActivity : ComponentActivity() {
                 ) {
                     composable(ARG_NAVIGATION_SEARCH) {
                         HomeListScreen(
-                            homeListViewModel = homeListViewModel,
                             navController = navController
                         )
                     }
@@ -148,10 +146,7 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                     ) { entry ->
-                        HomeListDetail(
-                            homeListDetailViewModel = homeListDetailViewModel,
-                            id = entry.arguments?.getString(ARG_NAVIGATION_SEARCH_ID).orEmpty()
-                        )
+                        HomeListDetail()
                     }
                 }
             }

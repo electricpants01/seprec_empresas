@@ -13,20 +13,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.locotoinnovations.core.model.CompanyDetail
+import com.locotoinnovations.core.repository.CompanyRepository
+import com.locotoinnovations.core.repository.ICompanyService
+import com.locotoinnovations.core.retrofit.NetworkResult
+import com.locotoinnovations.seprecbolivia.ui.view.MainActivity
 import com.locotoinnovations.seprecbolivia.ui.view.components.CompanyDetailCard
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeListDetail(
-    homeListDetailViewModel: HomeListDetailViewModel,
-    id: String,
+    homeListDetailViewModel: HomeListDetailViewModel = hiltViewModel(),
 ) {
-
-    LaunchedEffect(key1 = id) {
-        homeListDetailViewModel.getCompanyDetail(id)
-    }
 
     val context: Context = LocalContext.current
     val companyDetail by homeListDetailViewModel.companyDetail.collectAsState(CompanyDetail.empty())
@@ -100,6 +107,40 @@ fun HomeListDetail(
     }
 }
 
-fun <T : Any?> List<T>.detailListToString(): String {
-    return this.joinToString(separator = "\n", prefix = "✔ ")
+@PreviewLightDark
+@Composable
+fun PreviewHomeListDetail() {
+    // Mock SavedStateHandle with the necessary argument
+    val mockSavedStateHandle = SavedStateHandle(
+        mapOf(MainActivity.ARG_NAVIGATION_SEARCH_ID to "mockCompanyId")
+    )
+
+    // Mock implementation of ICompanyService
+    val mockService = object : ICompanyService {
+        override suspend fun getCompany(searchCompany: String): NetworkResult {
+            return NetworkResult.NetworkSuccess(CompanyDetail.sample())
+        }
+
+        override suspend fun getCompanyDetail(companyId: String): NetworkResult {
+            return NetworkResult.NetworkSuccess(CompanyDetail.sample())
+        }
+
+        override suspend fun getTramiteDetail(tramiteId: String): NetworkResult {
+            return NetworkResult.NetworkSuccess(CompanyDetail.sample())
+        }
+    }
+
+    // Mocking the repository with the mocked service
+    val mockRepository = CompanyRepository(mockService)
+
+    // Mock ViewModel
+    val mockViewModel = HomeListDetailViewModel(
+        savedStateHandle = mockSavedStateHandle,
+        companyRepository = mockRepository,
+    )
+
+    // Preview the composable
+    HomeListDetail(
+        homeListDetailViewModel = mockViewModel,
+    )
 }
