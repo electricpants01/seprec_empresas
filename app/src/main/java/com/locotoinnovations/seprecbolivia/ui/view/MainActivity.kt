@@ -4,47 +4,36 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.locotoinnovations.seprecbolivia.R
 import com.locotoinnovations.seprecbolivia.ui.theme.SeprecBoliviaTheme
 import com.locotoinnovations.seprecbolivia.ui.view.bottomNav.BottomNavigationBar
 import com.locotoinnovations.seprecbolivia.ui.view.bottomNav.BottomNavigationRailBar
 import com.locotoinnovations.seprecbolivia.ui.view.bottomNav.bottomNavItems
 import com.locotoinnovations.seprecbolivia.ui.view.screen.Contact.InfoScreen
 import com.locotoinnovations.seprecbolivia.ui.view.screen.Tramite.TramiteScreen
-import com.locotoinnovations.seprecbolivia.ui.view.screen.Tramite.TramiteViewModel
 import com.locotoinnovations.seprecbolivia.ui.view.screen.homeList.HomeListScreen
-import com.locotoinnovations.seprecbolivia.ui.view.screen.homeList.HomeListViewModel
 import com.locotoinnovations.seprecbolivia.ui.view.screen.homeListDetail.HomeListDetail
-import com.locotoinnovations.seprecbolivia.ui.view.screen.homeListDetail.HomeListDetailViewModel
 import com.locotoinnovations.seprecbolivia.ui.view.screen.map.SeprecMapScreen
 import dagger.hilt.android.AndroidEntryPoint
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -72,16 +61,6 @@ class MainActivity : ComponentActivity() {
             val isTablet = windowClass.widthSizeClass != WindowWidthSizeClass.Compact
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
-                topBar = {
-                    TopAppBar(
-                        title = {
-                            Text(stringResource(id = R.string.app_name))
-                        },
-                        modifier = Modifier.padding(
-                            start = if (isTablet) 80.dp else 0.dp
-                        )
-                    )
-                },
                 bottomBar = {
                     if (isTablet) {
                         BottomNavigationRailBar(
@@ -121,7 +100,8 @@ class MainActivity : ComponentActivity() {
                 ) {
                     composable(ARG_NAVIGATION_SEARCH) {
                         HomeListScreen(
-                            navController = navController
+                            navController = navController,
+                            isTablet = isTablet,
                         )
                     }
                     composable(
@@ -144,17 +124,14 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                     ) {
-                        HomeListDetail()
+                        HomeListDetail(
+                            onBackClick = {
+                                navController.navigateUp()
+                            }
+                        )
                     }
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    SeprecBoliviaTheme {
     }
 }
