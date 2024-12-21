@@ -58,8 +58,6 @@ class MainActivity : ComponentActivity() {
         const val ARG_NAVIGATION_SEARCH_ID = "id"
     }
 
-    private val tramiteViewModel: TramiteViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -129,7 +127,7 @@ class MainActivity : ComponentActivity() {
                     composable(
                         ARG_NAVIGATION_TRAMITE
                     ) {
-                        TramiteScreen(tramiteViewModel = tramiteViewModel)
+                        TramiteScreen()
                     }
                     composable(ARG_NAVIGATION_MAP) {
                         SeprecMapScreen()
@@ -145,7 +143,7 @@ class MainActivity : ComponentActivity() {
                                 nullable = false
                             }
                         )
-                    ) { entry ->
+                    ) {
                         HomeListDetail()
                     }
                 }

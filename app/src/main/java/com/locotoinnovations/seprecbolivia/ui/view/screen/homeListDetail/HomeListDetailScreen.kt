@@ -48,9 +48,7 @@ fun HomeListDetail(
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 }
 
-                null -> {
-                    // no-op
-                }
+                null -> Unit
             }
         }
 
