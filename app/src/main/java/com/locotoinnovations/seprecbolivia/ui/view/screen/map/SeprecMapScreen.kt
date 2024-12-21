@@ -40,6 +40,7 @@ import com.locotoinnovations.seprecbolivia.R
 fun SeprecMapScreen() {
 
     val markerList = listOf(
+        // Santa Cruz de la Sierra
         SeprecMarkerData(
             LatLng(-17.774221417256665, -63.17967653788192),
             "Seprec Central - Santa Cruz",
@@ -55,10 +56,45 @@ fun SeprecMapScreen() {
             "Seprec Santa Cruz Montero",
             "C. Litoral, Montero"
         ),
+        // la paz
         SeprecMarkerData(
-            LatLng(-16.507657332497516, -68.1270079457679),
-            "Seprec Central - La Paz",
-            "Av.6 de Agosto, La Paz"
+            LatLng(-16.497667, -68.164583),
+            "Seprec La paz - El alto",
+            "Avenida Panorámica, Estación Jach´a Qhathu, Línea Roja Mi Teleférico, local comercial RJ-JQ-COM-LOC-3"
+        ),
+        SeprecMarkerData(
+            LatLng(-16.541167, -68.08825),
+            "Seprec La paz - Zona Sur",
+            "Avenida Sánchez Bustamante, esquina calle 11 de Calacoto"
+        ),
+        // Cochabamba
+        SeprecMarkerData(
+            LatLng(-17.384944, -66.157278),
+            "Seprec Central - Cochambamba",
+            "Avenida José Ballivián (El Prado), entre calles La Paz y Chuquisaca, edificio Ave Paraíso Nº 688"
+        ),
+        SeprecMarkerData(
+            LatLng(-17.396833, -66.279028),
+            "Seprec Cochabamba - Quillacollo",
+            "Calle Pacheco, entre Nathaniel Aguirre y 14 de Septiembre, edificio IBM, piso 3"
+        ),
+        // Potosi
+        SeprecMarkerData(
+            LatLng(-19.581917, -65.757972),
+            "Seprec Potosi",
+            "Avenida Villazón, entre calles San Alberto y Wenceslao Alba, edificio Salinas Nº 242"
+        ),
+        // Sucre
+        SeprecMarkerData(
+            LatLng(-19.046611, -65.260139),
+            "Seprec Sucre",
+            "Calle General Arenales 17-19 entre Calles Junín y Aniceto Arce, Zona Central de la ciudad de Sucre - Chuquisaca"
+        ),
+        // Tarija
+        SeprecMarkerData(
+            LatLng(-21.540028, -64.724806),
+            "Seprec Tarija",
+            "Avenida La Paz, entre calles Ciro Trigo y Avaroa, edificio Santa Clara Nº 243, zona Villa Fátima"
         ),
     )
 
@@ -142,7 +178,11 @@ fun SeprecMapScreen() {
                     Text(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 8.dp),
+                            .padding(vertical = 8.dp)
+                            .clickable {
+                                centerMap = markerList[5]
+                                isSheetOpen = false
+                            },
                         textAlign = TextAlign.Center,
                         fontSize = 24.sp,
                         text = "Cochabamba"
@@ -162,7 +202,23 @@ fun SeprecMapScreen() {
                     Text(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 8.dp),
+                            .padding(vertical = 8.dp)
+                            .clickable {
+                                centerMap = markerList[7]
+                                isSheetOpen = false
+                            },
+                        textAlign = TextAlign.Center,
+                        fontSize = 24.sp,
+                        text = "Potosí"
+                    )
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
+                            .clickable {
+                                centerMap = markerList[8]
+                                isSheetOpen = false
+                            },
                         textAlign = TextAlign.Center,
                         fontSize = 24.sp,
                         text = "Sucre"
@@ -170,7 +226,11 @@ fun SeprecMapScreen() {
                     Text(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 8.dp),
+                            .padding(vertical = 8.dp)
+                            .clickable {
+                                centerMap = markerList[9]
+                                isSheetOpen = false
+                            },
                         textAlign = TextAlign.Center,
                         fontSize = 24.sp,
                         text = "Tarija"
