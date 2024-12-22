@@ -89,8 +89,6 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     // work manager
     implementation(libs.work.manager)
-    // room
-    implementation(libs.room.ktx)
     // chucker
     debugImplementation("com.github.chuckerteam.chucker:library:3.5.2")
     releaseImplementation("com.github.chuckerteam.chucker:library-no-op:3.5.2")
