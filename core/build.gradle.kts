@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.locotoinnovations.core"
+    namespace = "com.locototeam.core"
     compileSdk = 35
 
     buildFeatures {
