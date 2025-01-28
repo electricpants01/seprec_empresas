@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.locotoinnovations.seprecbolivia"
+    namespace = "com.locototeam.seprecbolivia"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.locotoinnovations.seprecbolivia"
+        applicationId = "com.locototeam.seprecbolivia"
         minSdk = 26
         targetSdk = 35
         versionCode = 4
@@ -89,8 +89,6 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     // work manager
     implementation(libs.work.manager)
-    // room
-    implementation(libs.room.ktx)
     // chucker
     debugImplementation("com.github.chuckerteam.chucker:library:3.5.2")
     releaseImplementation("com.github.chuckerteam.chucker:library-no-op:3.5.2")
