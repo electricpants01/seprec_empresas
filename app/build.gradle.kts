@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.locotoinnovations.seprecbolivia"
+    namespace = "com.locototeam.seprecbolivia"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.locotoinnovations.seprecbolivia"
+        applicationId = "com.locototeam.seprecbolivia"
         minSdk = 26
         targetSdk = 35
         versionCode = 4
