@@ -14,7 +14,7 @@ android {
         applicationId = "com.locototeam.seprecbolivia"
         minSdk = 26
         targetSdk = 35
-        versionCode = 4
+        versionCode = 1
         versionName = "2025.0216"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
