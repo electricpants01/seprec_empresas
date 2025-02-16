@@ -14,8 +14,8 @@ android {
         applicationId = "com.locototeam.seprecbolivia"
         minSdk = 26
         targetSdk = 35
-        versionCode = 4
-        versionName = "2.0.1"
+        versionCode = 1
+        versionName = "2025.0216"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
