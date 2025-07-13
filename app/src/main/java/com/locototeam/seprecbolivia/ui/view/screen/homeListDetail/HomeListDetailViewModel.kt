@@ -11,15 +11,12 @@ import com.locototeam.core.retrofit.NetworkResult
 import com.locototeam.seprecbolivia.ui.view.MainActivity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-open class HomeListDetailViewModel @Inject constructor(
+class HomeListDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val companyRepository: CompanyRepository,
 ) : ViewModel(), SeprecScaffold<HomeListDetailUiState, HomeListDetailEvent, HomeListDetailSideEffect> by seprecScaffold(
@@ -62,7 +59,7 @@ open class HomeListDetailViewModel @Inject constructor(
     }
 }
 
-data class HomeListDetailUiState(
+internal data class HomeListDetailUiState(
     val companyDetail: CompanyDetail,
 )
 
@@ -70,7 +67,7 @@ interface HomeListDetailEvent {
     data object InitContent : HomeListDetailEvent
 }
 
-interface HomeListDetailSideEffect {
+internal interface HomeListDetailSideEffect {
     data class CompanyDetailNotFound(val message: String = "Company detail not found") : HomeListDetailSideEffect
     data class NetworkError(val message: String = "Network error") : HomeListDetailSideEffect
 

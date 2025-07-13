@@ -27,10 +27,10 @@ import com.locototeam.seprecbolivia.ui.view.bottomNav.BottomNavigationBar
 import com.locototeam.seprecbolivia.ui.view.bottomNav.BottomNavigationRailBar
 import com.locototeam.seprecbolivia.ui.view.bottomNav.bottomNavItems
 import com.locototeam.seprecbolivia.ui.view.screen.Contact.InfoScreen
-import com.locototeam.seprecbolivia.ui.view.screen.Tramite.TramiteScreen
 import com.locototeam.seprecbolivia.ui.view.screen.homeList.HomeListScreen
 import com.locototeam.seprecbolivia.ui.view.screen.homeListDetail.HomeListDetail
 import com.locototeam.seprecbolivia.ui.view.screen.map.SeprecMapScreen
+import com.locototeam.seprecbolivia.ui.view.screen.tramite.TramiteScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)

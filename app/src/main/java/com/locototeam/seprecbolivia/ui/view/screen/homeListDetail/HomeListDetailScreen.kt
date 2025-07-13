@@ -1,6 +1,5 @@
 package com.locototeam.seprecbolivia.ui.view.screen.homeListDetail
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,23 +16,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.locototeam.core.model.CompanyDetail
-import com.locototeam.core.repository.CompanyRepository
-import com.locototeam.core.repository.ICompanyService
-import com.locototeam.core.retrofit.NetworkResult
-import com.locototeam.seprecbolivia.ui.view.MainActivity
 import com.locototeam.seprecbolivia.ui.view.components.CompanyDetailCard
 import kotlinx.coroutines.flow.collectLatest
 
