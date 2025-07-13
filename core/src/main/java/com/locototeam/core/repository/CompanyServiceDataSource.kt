@@ -4,6 +4,8 @@ import com.locototeam.core.R
 import com.locototeam.core.model.Company
 import com.locototeam.core.retrofit.CompanyService
 import com.locototeam.core.retrofit.NetworkResult
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.net.UnknownHostException
 import javax.inject.Inject
 
@@ -12,8 +14,8 @@ class CompanyServiceDataSource @Inject constructor(
 ) : ICompanyService {
     override suspend fun getCompany(
         searchCompany: String,
-    ): NetworkResult {
-        return try {
+    ): NetworkResult = withContext(Dispatchers.IO) {
+        try {
             val response = companyService.getCompany(searchCompany)
             if (response.isSuccessful) {
                 val body = response.body()
@@ -32,8 +34,9 @@ class CompanyServiceDataSource @Inject constructor(
         }
     }
 
-    override suspend fun getCompanyDetail(companyId: String): NetworkResult {
-        return try {
+    override suspend fun getCompanyDetail(companyId: String): NetworkResult = withContext(
+        Dispatchers.IO) {
+        try {
             val response = companyService.getCompanyDetail(companyId)
             if (response.isSuccessful) {
                 response.body().let { details ->
@@ -47,8 +50,9 @@ class CompanyServiceDataSource @Inject constructor(
         }
     }
 
-    override suspend fun getTramiteDetail(tramiteId: String): NetworkResult {
-        return try {
+    override suspend fun getTramiteDetail(tramiteId: String): NetworkResult = withContext(
+        Dispatchers.IO) {
+        try {
             val response = companyService.getTramiteDetail(tramiteId)
             if (response.isSuccessful) {
                 response.body().let { detail ->

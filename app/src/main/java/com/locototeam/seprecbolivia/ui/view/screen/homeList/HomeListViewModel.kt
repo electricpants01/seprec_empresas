@@ -2,66 +2,76 @@ package com.locototeam.seprecbolivia.ui.view.screen.homeList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.locototeam.core.arch.SeprecScaffold
+import com.locototeam.core.arch.seprecScaffold
 import com.locototeam.core.model.Company
 import com.locototeam.core.repository.CompanyRepository
 import com.locototeam.core.retrofit.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeListViewModel @Inject constructor(
     private val companyRepository: CompanyRepository,
-) : ViewModel() {
-
-    private val _event = MutableStateFlow<HomeListEvent?>(null)
-    private val _companyList: MutableStateFlow<Company> = MutableStateFlow(Company.empty())
-    val companyList = _companyList.asStateFlow()
-
-    // first state the user is searching
-    private val _isSearching = MutableStateFlow(false)
-    val isSearching = _isSearching.asStateFlow()
-
-    //second state the text typed by the user
-    private val _searchText = MutableStateFlow("")
-    val searchText = _searchText.asStateFlow()
-
-    init {
-        getCompanyList("ypfb")
-    }
-
+) : ViewModel(),
+    SeprecScaffold<HomeListUiState, HomeListEvent, HomeListSideEffect> by seprecScaffold(
+        initialState = HomeListUiState(Company.empty())
+    ) {
     private fun getCompanyList(searchCompanyText: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val result = companyRepository.getCompany(searchCompanyText)
-            withContext(Dispatchers.Main) {
-                when (result) {
-                    is NetworkResult.NetworkSuccess<*> -> {
-                        // emit company list
-                        _companyList.value = result.data as Company
-                    }
-
-                    is NetworkResult.NetworkEmptyResult<*> -> {
-                        _event.emit(HomeListEvent.ShowError("No company found"))
-                    }
-
-                    is NetworkResult.NetworkFailure -> {
-                        _event.emit(HomeListEvent.ShowError("Network error"))
+            when (result) {
+                is NetworkResult.NetworkSuccess<*> -> {
+                    // emit company list
+                    val result = result.data as Company
+                    updateViewState {
+                        it.copy(company = result)
                     }
                 }
+
+                is NetworkResult.NetworkEmptyResult<*> -> {
+                    viewModelScope.emitSideEffect(HomeListSideEffect.NoCompanyFound())
+                }
+
+                is NetworkResult.NetworkFailure -> {
+                    viewModelScope.emitSideEffect(HomeListSideEffect.NoInternetConnection())
+                }
             }
+
         }
     }
 
-    fun onSearchTextChange(text: String) {
-        _searchText.value = text
-        getCompanyList(text)
+    override fun handleEvent(event: HomeListEvent) {
+        when (event) {
+            is HomeListEvent.InitContent -> initContent()
+            is HomeListEvent.SearchCompany -> searchCompany(event.searchCompanyText)
+        }
     }
 
-    sealed class HomeListEvent {
-        data class ShowError(val message: String) : HomeListEvent()
+    private fun initContent() {
+        getCompanyList("ypfb")
     }
+
+    private fun searchCompany(searchCompanyText: String) {
+        updateViewState { it.copy(searchText = searchCompanyText) }
+        getCompanyList(searchCompanyText)
+    }
+}
+
+data class HomeListUiState(
+    val company: Company,
+    val isSearching: Boolean = false,
+    val searchText: String = "",
+)
+
+interface HomeListEvent {
+    data object InitContent : HomeListEvent
+    data class SearchCompany(val searchCompanyText: String) : HomeListEvent
+}
+
+sealed class HomeListSideEffect {
+    data class NoCompanyFound(val message: String = "No company found") : HomeListSideEffect()
+    data class NoInternetConnection(val message: String = "No internet connection") :
+        HomeListSideEffect()
 }

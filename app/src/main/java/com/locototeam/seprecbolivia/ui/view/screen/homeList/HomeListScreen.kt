@@ -15,13 +15,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.locototeam.core.model.Company
@@ -39,8 +42,15 @@ fun HomeListScreen(
     navController: NavController,
     isTablet: Boolean,
 ) {
-    val companyList by homeListViewModel.companyList.collectAsState(initial = Company.empty())
-    val searchText by homeListViewModel.searchText.collectAsState()
+    val homeListViewState by homeListViewModel.viewState.collectAsStateWithLifecycle()
+    var isInitiated = rememberSaveable { false }
+
+    LaunchedEffect(Unit) {
+        if (!isInitiated) {
+            homeListViewModel.handleEvent(HomeListEvent.InitContent)
+        }
+        isInitiated = true
+    }
 
     Scaffold(
         topBar = {
@@ -63,7 +73,7 @@ fun HomeListScreen(
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth(),
-                value = searchText,
+                value = homeListViewState.searchText,
                 maxLines = 1,
                 placeholder = {
                     Text(stringResource(id = R.string.search_for_company))
@@ -71,15 +81,19 @@ fun HomeListScreen(
                 leadingIcon = {
                     Icon(imageVector = Icons.Filled.Search, contentDescription = "search")
                 },
-                onValueChange = homeListViewModel::onSearchTextChange
+                onValueChange = {
+                    homeListViewModel.handleEvent(HomeListEvent.SearchCompany(
+                        searchCompanyText = it
+                    ))
+                }
             )
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = 12.dp)
             ) {
-                items(companyList.datos?.filas?.size ?: 0) { index ->
-                    val company = companyList.datos?.filas?.get(index)
+                items(homeListViewState.company.datos?.filas?.size ?: 0) { index ->
+                    val company = homeListViewState.company.datos?.filas?.get(index)
                     company?.let {
                         CompanyCard(
                             razonSocial = it.razonSocial.orEmpty(),
