@@ -59,7 +59,7 @@ class HomeListViewModel @Inject constructor(
     }
 }
 
-data class HomeListUiState(
+internal data class HomeListUiState(
     val company: Company,
     val isSearching: Boolean = false,
     val searchText: String = "",
@@ -70,8 +70,8 @@ interface HomeListEvent {
     data class SearchCompany(val searchCompanyText: String) : HomeListEvent
 }
 
-sealed class HomeListSideEffect {
-    data class NoCompanyFound(val message: String = "No company found") : HomeListSideEffect()
+internal interface HomeListSideEffect {
+    data class NoCompanyFound(val message: String = "No company found") : HomeListSideEffect
     data class NoInternetConnection(val message: String = "No internet connection") :
-        HomeListSideEffect()
+        HomeListSideEffect
 }

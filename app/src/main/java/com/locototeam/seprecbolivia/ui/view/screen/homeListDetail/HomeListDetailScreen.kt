@@ -1,5 +1,6 @@
 package com.locototeam.seprecbolivia.ui.view.screen.homeListDetail
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -26,6 +28,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.locototeam.core.model.CompanyDetail
 import com.locototeam.core.repository.CompanyRepository
 import com.locototeam.core.repository.ICompanyService
@@ -42,15 +45,23 @@ fun HomeListDetail(
 ) {
 
     val context: Context = LocalContext.current
-    val companyDetail by homeListDetailViewModel.companyDetail.collectAsState(CompanyDetail.empty())
+    val companyDetailUiState by homeListDetailViewModel.viewState.collectAsStateWithLifecycle()
+    var isInitialized = rememberSaveable { false }
 
-    LaunchedEffect(homeListDetailViewModel.event) {
-        homeListDetailViewModel.event.collectLatest { event ->
+    LaunchedEffect(Unit) {
+        if (!isInitialized) {
+            homeListDetailViewModel.handleEvent(HomeListDetailEvent.InitContent)
+        }
+        isInitialized = false
+    }
+
+    LaunchedEffect(homeListDetailViewModel.sideEffects) {
+        homeListDetailViewModel.sideEffects.collectLatest { event ->
             when (event) {
-                is HomeListDetailViewModel.HomeListDetailEvent.DetailNotFound -> {
+                is HomeListDetailSideEffect.CompanyDetailNotFound -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 }
-                is HomeListDetailViewModel.HomeListDetailEvent.NetworkError -> {
+                is HomeListDetailSideEffect.NetworkError -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 }
 
@@ -64,7 +75,7 @@ fun HomeListDetail(
             TopAppBar(
                 title = {
                     Text(
-                        text = companyDetail.datos?.razonSocial.orEmpty(),
+                        text = companyDetailUiState.companyDetail.datos?.razonSocial.orEmpty(),
                         style = MaterialTheme.typography.bodyLarge,
                     )
                 },
@@ -84,7 +95,7 @@ fun HomeListDetail(
                 .padding(innerPadding)
         ) {
             item {
-                companyDetail.datos?.let {
+                companyDetailUiState.companyDetail.datos?.let {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center,
@@ -132,43 +143,4 @@ fun HomeListDetail(
             }
         }
     }
-}
-
-@PreviewLightDark
-@Composable
-fun PreviewHomeListDetail() {
-    // Mock SavedStateHandle with the necessary argument
-    val mockSavedStateHandle = SavedStateHandle(
-        mapOf(MainActivity.ARG_NAVIGATION_SEARCH_ID to "mockCompanyId")
-    )
-
-    // Mock implementation of ICompanyService
-    val mockService = object : ICompanyService {
-        override suspend fun getCompany(searchCompany: String): NetworkResult {
-            return NetworkResult.NetworkSuccess(CompanyDetail.sample())
-        }
-
-        override suspend fun getCompanyDetail(companyId: String): NetworkResult {
-            return NetworkResult.NetworkSuccess(CompanyDetail.sample())
-        }
-
-        override suspend fun getTramiteDetail(tramiteId: String): NetworkResult {
-            return NetworkResult.NetworkSuccess(CompanyDetail.sample())
-        }
-    }
-
-    // Mocking the repository with the mocked service
-    val mockRepository = CompanyRepository(mockService)
-
-    // Mock ViewModel
-    val mockViewModel = HomeListDetailViewModel(
-        savedStateHandle = mockSavedStateHandle,
-        companyRepository = mockRepository,
-    )
-
-    // Preview the composable
-    HomeListDetail(
-        homeListDetailViewModel = mockViewModel,
-        onBackClick = { }
-    )
 }

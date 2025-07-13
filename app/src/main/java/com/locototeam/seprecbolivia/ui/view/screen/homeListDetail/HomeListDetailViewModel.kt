@@ -3,6 +3,8 @@ package com.locototeam.seprecbolivia.ui.view.screen.homeListDetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.locototeam.core.arch.SeprecScaffold
+import com.locototeam.core.arch.seprecScaffold
 import com.locototeam.core.model.CompanyDetail
 import com.locototeam.core.repository.CompanyRepository
 import com.locototeam.core.retrofit.NetworkResult
@@ -20,18 +22,16 @@ import javax.inject.Inject
 open class HomeListDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val companyRepository: CompanyRepository,
-) : ViewModel() {
+) : ViewModel(), SeprecScaffold<HomeListDetailUiState, HomeListDetailEvent, HomeListDetailSideEffect> by seprecScaffold(
+    initialState = HomeListDetailUiState(CompanyDetail.empty())
+) {
 
     private val companyId: String = savedStateHandle.get<String>(MainActivity.ARG_NAVIGATION_SEARCH_ID)!!
 
-    private val _companyDetail = MutableStateFlow(CompanyDetail.empty())
-    val companyDetail: StateFlow<CompanyDetail> = _companyDetail.asStateFlow()
-
-    private val _event = MutableStateFlow<HomeListDetailEvent?>(null)
-    val event: StateFlow<HomeListDetailEvent?> = _event.asStateFlow()
-
-    init {
-        getCompanyDetail(companyId)
+    override fun handleEvent(event: HomeListDetailEvent) {
+        when (event) {
+            is HomeListDetailEvent.InitContent -> initContent()
+        }
     }
 
     private fun getCompanyDetail(companyId: String) {
@@ -40,15 +40,16 @@ open class HomeListDetailViewModel @Inject constructor(
             withContext(Dispatchers.Main) {
                 when (result) {
                     is NetworkResult.NetworkSuccess<*> -> {
-                        _companyDetail.value = result.data as CompanyDetail
+                        val result = result.data as CompanyDetail
+                        updateViewState { it.copy(companyDetail = result) }
                     }
 
                     is NetworkResult.NetworkEmptyResult<*> -> {
-                        _event.emit(HomeListDetailEvent.DetailNotFound("No company detail found"))
+                        viewModelScope.emitSideEffect(HomeListDetailSideEffect.CompanyDetailNotFound())
                     }
 
                     is NetworkResult.NetworkFailure -> {
-                        _event.emit(HomeListDetailEvent.NetworkError("Network error"))
+                        viewModelScope.emitSideEffect(HomeListDetailSideEffect.NetworkError())
                     }
                 }
 
@@ -56,8 +57,21 @@ open class HomeListDetailViewModel @Inject constructor(
         }
     }
 
-    sealed class HomeListDetailEvent {
-        data class DetailNotFound(val message: String) : HomeListDetailEvent()
-        data class NetworkError(val message: String) : HomeListDetailEvent()
+    private fun initContent() {
+        getCompanyDetail(companyId)
     }
+}
+
+data class HomeListDetailUiState(
+    val companyDetail: CompanyDetail,
+)
+
+interface HomeListDetailEvent {
+    data object InitContent : HomeListDetailEvent
+}
+
+interface HomeListDetailSideEffect {
+    data class CompanyDetailNotFound(val message: String = "Company detail not found") : HomeListDetailSideEffect
+    data class NetworkError(val message: String = "Network error") : HomeListDetailSideEffect
+
 }
