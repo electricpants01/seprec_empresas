@@ -137,12 +137,10 @@ fun HomeListDetail(
 @PreviewLightDark
 @Composable
 fun PreviewHomeListDetail() {
-    // Mock SavedStateHandle with the necessary argument
     val mockSavedStateHandle = SavedStateHandle(
         mapOf(MainActivity.ARG_NAVIGATION_SEARCH_ID to "mockCompanyId")
     )
 
-    // Mock implementation of ICompanyService
     val mockService = object : ICompanyService {
         override suspend fun getCompany(searchCompany: String): NetworkResult {
             return NetworkResult.NetworkSuccess(CompanyDetail.sample())
@@ -157,16 +155,13 @@ fun PreviewHomeListDetail() {
         }
     }
 
-    // Mocking the repository with the mocked service
     val mockRepository = CompanyRepository(mockService)
 
-    // Mock ViewModel
     val mockViewModel = HomeListDetailViewModel(
         savedStateHandle = mockSavedStateHandle,
         companyRepository = mockRepository,
     )
 
-    // Preview the composable
     HomeListDetail(
         homeListDetailViewModel = mockViewModel,
         onBackClick = { }

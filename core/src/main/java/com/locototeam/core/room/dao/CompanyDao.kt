@@ -5,7 +5,7 @@ import androidx.room.Query
 import com.locototeam.core.room.entity.CompanyEntity
 
 @Dao
-abstract class CompanyDao: UtilDao<CompanyEntity> {
+abstract class CompanyDao : UtilDao<CompanyEntity> {
 
     @Query("SELECT * FROM company")
     abstract fun getAll(): List<CompanyEntity>
