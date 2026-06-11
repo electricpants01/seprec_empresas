@@ -11,11 +11,11 @@ plugins {
 
 // Read keystore credentials from environment (for CI/CD)
 // isNullOrBlank guards against GitHub Actions passing empty strings for unset secrets
-val keystorePassword: String? = System.getenv("KEYSTORE_PASSWORD")
-val keyAlias: String? = System.getenv("KEY_ALIAS")
-val keyPassword: String? = System.getenv("KEY_PASSWORD") ?: keystorePassword
-val keystoreFile = rootProject.file("bolivia_empresas.jks")
-val canSign = keystoreFile.exists() && !keystorePassword.isNullOrBlank() && !keyAlias.isNullOrBlank()
+val myKeystorePassword: String? = System.getenv("KEYSTORE_PASSWORD")
+val myKeyAlias: String? = System.getenv("KEY_ALIAS")
+val myKeyPassword: String? = System.getenv("KEY_PASSWORD") ?: myKeystorePassword
+val myKeystoreFile = rootProject.file("bolivia_empresas.jks")
+val canSign = myKeystoreFile.exists() && !myKeystorePassword.isNullOrBlank() && !myKeyAlias.isNullOrBlank()
 
 android {
     namespace = "com.locototeam.seprecbolivia"
@@ -37,10 +37,10 @@ android {
     signingConfigs {
         if (canSign) {
             create("release") {
-                storeFile = keystoreFile
-                storePassword = keystorePassword
+                storeFile = myKeystoreFile
+                storePassword = myKeystorePassword
                 keyAlias = keyAlias
-                keyPassword = System.getenv("KEY_PASSWORD")
+                keyPassword = myKeyPassword
             }
         }
     }
