@@ -1,0 +1,78 @@
+# Cline Rules - Seprec Bolivia / Bolivia Empresas
+
+## Project Overview
+This is an Android application ("Bolivia Empresas" / "Seprec Bolivia") that allows users to search for companies registered in SEPREC Bolivia, view company details, track formalities (trámites), and locate SEPREC offices on a map.
+
+## Tech Stack
+- **Language**: Kotlin
+- **UI**: Jetpack Compose (Material 3) with window size class support (phone & tablet)
+- **Architecture**: MVVM with Clean Architecture
+- **DI**: Dagger Hilt (SingletonComponent)
+- **Networking**: Retrofit 2 + OkHttp 4 + Gson
+- **Database**: Room (version 2, with migration 1→2)
+- **Navigation**: Navigation Compose (4 tabs: search, tramite, map, me)
+- **Maps**: Google Maps Compose + Google Play Services Location
+- **Background**: WorkManager
+- **HTTP Inspector**: Chucker (debug only)
+- **Build**: Gradle KTS, Kotlin 2.2.10, KSP, AGP 9.1.0, Compose Compiler plugin
+
+## Project Structure
+```
+seprec_empresas/
+├── app/                          # Main application module
+│   ├── src/main/java/com/locototeam/seprecbolivia/
+│   │   ├── SeprecBoliviaApplication.kt     # @HiltAndroidApp
+│   │   ├── Util.kt                          # Extension functions (date, network)
+│   │   ├── ui/theme/                        # Material 3 theme (Color, Type, Theme)
+│   │   ├── ui/view/
+│   │   │   ├── MainActivity.kt              # Single activity, NavHost, bottom nav
+│   │   │   ├── bottomNav/                   # BottomNavItem, BottomNavigationBar
+│   │   │   ├── screen/homeList/             # HomeListScreen + HomeListViewModel
+│   │   │   ├── screen/homeListDetail/       # HomeListDetail + ViewModel
+│   │   │   ├── screen/Tramite/              # TramiteScreen + TramiteViewModel
+│   │   │   ├── screen/map/                  # SeprecMapScreen (Google Maps)
+│   │   │   ├── screen/Contact/              # InfoScreen
+│   │   │   └── components/                  # Reusable composables
+│   │   ├── framework/broadcaster/           # ConnectivityBroadcast
+│   │   └── worker/                          # ConnectivityWorker
+│   └── src/main/res/                        # Resources (values, values-es)
+├── core/                          # Core library module
+│   └── src/main/java/com/locototeam/core/
+│       ├── model/                 # Company, CompanyDetail, TramiteDetail
+│       ├── room/                  # SeprecDatabase, entities, DAOs
+│       ├── retrofit/              # CompanyService (Retrofit), NetworkResult
+│       ├── repository/            # CompanyRepository, ICompanyService, DataSource
+│       └── modules/               # NetworkModule, DatabaseModule (Hilt)
+```
+
+## Modules
+- **app** (`com.locototeam.seprecbolivia`): Application module, depends on `:core`
+- **core** (`com.locototeam.core`): Library module with data layer (network, database, models, repository)
+
+## API
+- Base URL: `https://servicios.seprec.gob.bo/`
+- Endpoints:
+  - `GET api/empresas/buscarEmpresas?filtro=&limite=30&pagina=1` → Company
+  - `GET api/empresas/informacionDirectorioEmpresa/{companyId}/establecimiento/{companyId}` → CompanyDetail
+  - `GET api/tramites/buscarTramite?codigo=` → TramiteDetail
+
+## Key Conventions
+1. **Dependency Injection**: Always use `@HiltViewModel` for ViewModels and `@Inject constructor` for repositories/services. Modules are `@InstallIn(SingletonComponent::class)`.
+2. **State Management**: Use `MutableStateFlow` + `asStateFlow()` in ViewModels. Collect via `collectAsState()` in composables.
+3. **Network Results**: Use the `NetworkResult` sealed class (NetworkSuccess, NetworkEmptyResult, NetworkFailure) for all API calls.
+4. **Repository Pattern**: `CompanyRepository` delegates to `ICompanyService` using the `by` keyword.
+5. **Navigation**: Routes defined in `MainActivity` companion object constants. Use `navArgument` for parameterized routes.
+6. **Preview**: Use `@PreviewLightDark` for composable previews. Provide mock data via `companion object` methods like `.sample()` and `.empty()`.
+7. **Localization**: String resources in `values/strings.xml` (English) and `values-es/strings.xml` (Spanish). Core module has its own string resources.
+8. **Tablet Support**: Use `calculateWindowSizeClass()` and adjust padding/use NavigationRail on tablet.
+9. **Threading**: Use `viewModelScope.launch(Dispatchers.IO)` for network calls, switch to `Dispatchers.Main` with `withContext` for state updates.
+10. **Naming**: Package `com.locototeam.seprecbolivia` for app, `com.locototeam.core` for core. ViewModels named `*ViewModel`, screens `*Screen`, composables `*Card`/`*Bar`.
+
+## When Changing Code
+- DO NOT remove or alter Hilt annotations without understanding the dependency graph
+- DO NOT change API endpoint paths without confirming with the SEPREC API
+- DO NOT modify the `Company`, `CompanyDetail`, or `TramiteDetail` model data classes without updating all consumers (Room entities, UI composables, parsers)
+- Always use string resources (not hardcoded strings) with both English and Spanish variants
+- Keep `core` module independent (no references to `app` module)
+- Follow the existing pattern: ViewModel → Repository → DataSource → Service
+- Use `sealed class` for event/state types within ViewModels

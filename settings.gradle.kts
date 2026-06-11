@@ -15,5 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Seprec bolivia"
 include(":app")
-include(":app:core")
 include(":core")

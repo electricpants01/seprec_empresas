@@ -5,7 +5,7 @@ import androidx.room.Query
 import com.locototeam.core.room.entity.ApiTimestampEntity
 
 @Dao
-abstract class ApiTimestampDao: UtilDao<ApiTimestampEntity> {
+abstract class ApiTimestampDao : UtilDao<ApiTimestampEntity> {
 
     @Query(
         """

@@ -33,6 +33,7 @@ import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.rememberMarkerState
 import com.locototeam.seprecbolivia.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -121,7 +122,7 @@ fun SeprecMapScreen() {
         ) {
             markerList.forEach { markerPosition ->
                 Marker(
-                    position = markerPosition.latLng,
+                    state = rememberMarkerState(position = markerPosition.latLng),
                     title = markerPosition.title,
                     snippet = markerPosition.snippet
                 )
