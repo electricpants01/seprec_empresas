@@ -10,16 +10,30 @@ You are working on a dual-module Android app:
 
 The app connects to the SEPREC Bolivia API (`https://servicios.seprec.gob.bo/`) to search companies, view company details, track formalities (trámites), and display SEPREC office locations on a map.
 
+## Build Environment
+- **JDK**: 21 (Android Studio bundled) for running Gradle, JVM 17 for compile target
+- **compileSdk**: 36, **minSdk**: 26, **targetSdk**: 35
+- **Gradle**: 9.3.1 via wrapper
+- **AGP**: 9.1.0, **Kotlin**: 2.2.10, **KSP**: 2.2.10-2.0.2
+- **Room**: 2.7.1 (KSP), **Hilt**: 2.53.1 (KAPT — not KSP, to avoid classloader conflict)
+
 ## Capabilities
 - Create new Compose screens with Material 3 design
 - Implement ViewModels with StateFlow state management
 - Define Retrofit API endpoints and handle responses with NetworkResult
-- Create Room entities, DAOs, and database migrations
-- Configure Hilt modules for dependency injection
+- Create Room entities, DAOs (abstract class extends UtilDao<T>), and migrations
+- Configure Hilt modules for dependency injection (KAPT-based)
 - Set up Navigation Compose routes with argument passing
 - Add multilingual string resources (English + Spanish)
 - Create responsive layouts for phones and tablets
 - Write composable previews with mock data
+- Manage signing config with CI/CD (env vars → real keystore, fallback → debug)
+
+## CI/CD
+- `.github/workflows/build.yml`: assembles debug APK on push/PR to main
+- `.github/workflows/release.yml`: builds signed APK, creates GitHub Release on `release/*` branches
+- Keystore stored as `KEYSTORE_BASE64` GitHub Secret in PROD environment
+- Version from branch name: `release/2026.06.11` → release named `release-2026.06.11`
 
 ## Rules
 1. Always follow the existing architecture: Composable → ViewModel → Repository → DataSource → Service
@@ -32,6 +46,8 @@ The app connects to the SEPREC Bolivia API (`https://servicios.seprec.gob.bo/`) 
 8. Use `viewModelScope.launch(Dispatchers.IO)` for network calls
 9. Add `@PreviewLightDark` composable previews with mock implementations
 10. Be multilingual-aware: provide Spanish translations for all user-facing strings
+11. DAOs: use `abstract class XxxDao : UtilDao<Entity>` pattern
+12. Hilt annotation processing uses KAPT (`kapt(libs.hilt.compiler)`), Room uses KSP
 
 ## When Creating New Features
 1. **Model**: Create data classes in `core/model/` matching API response structure
@@ -56,3 +72,5 @@ The app connects to the SEPREC Bolivia API (`https://servicios.seprec.gob.bo/`) 
 - Theme: `app/src/main/java/com/locototeam/seprecbolivia/ui/theme/`
 - Navigation: `app/src/main/java/com/locototeam/seprecbolivia/ui/view/MainActivity.kt`
 - Resources: `app/src/main/res/values/strings.xml` and `values-es/strings.xml`
+- Workflows: `.github/workflows/build.yml` and `release.yml`
+- Version catalog: `gradle/libs.versions.toml`
