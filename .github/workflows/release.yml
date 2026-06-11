@@ -14,6 +14,7 @@ jobs:
   release:
     name: Build & Release
     runs-on: ubuntu-latest
+    environment: PROD
 
     steps:
       - name: Checkout
@@ -74,7 +75,7 @@ jobs:
             ### Installation
             Download the APK below and install on any Android 8.0+ device.
           files: |
-            app/build/outputs/apk/release/app-release.apk
+            app/build/outputs/apk/release/release-*.apk
           draft: false
           prerelease: false
         env:

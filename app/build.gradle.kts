@@ -10,36 +10,12 @@ plugins {
 }
 
 // Read keystore credentials from environment (for CI/CD)
+// isNullOrBlank guards against GitHub Actions passing empty strings for unset secrets
 val keystorePassword: String? = System.getenv("KEYSTORE_PASSWORD")
 val keyAlias: String? = System.getenv("KEY_ALIAS")
 val keyPassword: String? = System.getenv("KEY_PASSWORD") ?: keystorePassword
 val keystoreFile = rootProject.file("bolivia_empresas.jks")
-val canSign = keystoreFile.exists() && keystorePassword != null && keyAlias != null
-
-// Auto-detect app versionName from environment or git tag
-// In CI, VERSION_NAME is set by the workflow (e.g., "2026.06.11")
-// Locally, falls back to git describe or a default
-fun getVersionName(): String {
-    System.getenv("VERSION_NAME")?.let { return it }
-    try {
-        val process = ProcessBuilder("git", "describe", "--tags", "--abbrev=0")
-            .directory(rootProject.projectDir)
-            .redirectErrorStream(true)
-            .start()
-        val tag = process.inputStream.bufferedReader().readText().trim()
-        if (tag.isNotEmpty()) return tag.removePrefix("v")
-    } catch (_: Exception) {}
-    return "0.0.0"
-}
-
-val appVersionName = getVersionName()
-
-// versionCode is manually maintained by the developer
-// Set via gradle.properties: appVersionCodeOverride=X
-// Or pass via command line: -PappVersionCodeOverride=X
-val appVersionCode: Int = (findProperty("appVersionCodeOverride") as? String)?.toIntOrNull()
-    ?: System.getenv("VERSION_CODE")?.toIntOrNull()
-    ?: 1
+val canSign = keystoreFile.exists() && !keystorePassword.isNullOrBlank() && !keyAlias.isNullOrBlank()
 
 android {
     namespace = "com.locototeam.seprecbolivia"
@@ -49,8 +25,8 @@ android {
         applicationId = "com.locototeam.seprecbolivia"
         minSdk = 26
         targetSdk = 35
-        versionCode = appVersionCode
-        versionName = appVersionName
+        versionCode = 1
+        versionName = "2026.06.11"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

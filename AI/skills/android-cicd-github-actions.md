@@ -14,20 +14,6 @@ source ~/.zshrc
 
 No `org.gradle.java.home` needed in `gradle.properties`.
 
-## Versioning
-
-### versionName (automatic)
-Derived from the branch/tag name. Examples:
-- `release/2026.06.11` → versionName `2026.06.11`
-- `v2026.06.11` → versionName `2026.06.11`
-- Local: from latest git tag, falls back to `0.0.0`
-
-### versionCode (manual)
-Controlled by the developer. Set via:
-- `gradle.properties`: `appVersionCodeOverride=X`
-- CI: `VERSION_CODE` GitHub Secret
-- Defaults to `1` if not set
-
 ## Workflows
 
 ### 1. Build (`build.yml`)
@@ -44,18 +30,23 @@ Controlled by the developer. Set via:
 
 ### 2. Release (`release.yml`)
 **Trigger**: Pushing to `release/*` branch or `v*` tag
+**Environment**: `PROD` (keystore secrets are stored here)
 
 | Step | Action |
 |---|---|
 | Checkout | `actions/checkout@v4` (fetch-depth: 0) |
-| Get version | Extracts version from branch/tag name, sets `VERSION_NAME` env var |
+| Get version | Extracts version from branch/tag name for release title only |
 | Decode keystore | `base64 --decode` from `KEYSTORE_BASE64` secret |
 | JDK 21 | `actions/setup-java@v4` |
 | Android SDK | `android-actions/setup-android@v3` |
-| Build signed APK | `./gradlew assembleRelease` with `VERSION_CODE` secret |
+| Build signed APK | `./gradlew assembleRelease` |
 | GitHub Release | `softprops/action-gh-release@v2` named `release-YYYY.MM.DD` |
 
-## Required GitHub Secrets
+## GitHub Environment: PROD
+
+All secrets are stored in the `PROD` environment. The release workflow references `environment: PROD`.
+
+### Required Secrets
 
 | Secret | Purpose |
 |---|---|
@@ -63,7 +54,6 @@ Controlled by the developer. Set via:
 | `KEYSTORE_PASSWORD` | Keystore password |
 | `KEY_ALIAS` | Key alias name |
 | `KEY_PASSWORD` | Key password (may be same as keystore password) |
-| `VERSION_CODE` | Manual version code (integer, e.g., `1`, `2`, `3`) |
 
 ## How to Release
 
@@ -71,10 +61,12 @@ Controlled by the developer. Set via:
 # Encode the keystore for GitHub Secret (do this once)
 base64 -i bolivia_empresas.jks | pbcopy
 
+# Bump the version manually in app/build.gradle.kts:
+#   val appVersionName = "2026.06.11"
+#   versionCode = 2
+
 # Create and push a release branch
 # Release will be named: release-2026.06.11
-# App versionName: 2026.06.11
-# App versionCode: from VERSION_CODE secret (set manually in GitHub)
 git checkout -b release/2026.06.11
 git push origin release/2026.06.11
 ```
