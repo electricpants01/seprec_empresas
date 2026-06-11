@@ -36,7 +36,6 @@ No `org.gradle.java.home` needed in `gradle.properties`.
 |---|---|
 | Checkout | `actions/checkout@v4` (fetch-depth: 0) |
 | Get version | Extracts version from branch/tag name for release title only |
-| Decode keystore | `base64 --decode` from `KEYSTORE_BASE64` secret |
 | JDK 21 | `actions/setup-java@v4` |
 | Android SDK | `android-actions/setup-android@v3` |
 | Build signed APK | `./gradlew assembleRelease` |
@@ -50,8 +49,6 @@ All secrets are stored in the `PROD` environment. The release workflow reference
 
 | Secret | Purpose |
 |---|---|
-| `KEYSTORE_BASE64` | Base64-encoded JKS keystore file |
-| `KEYSTORE_PASSWORD` | Keystore password |
 | `KEY_ALIAS` | Key alias name |
 | `KEY_PASSWORD` | Key password (may be same as keystore password) |
 
