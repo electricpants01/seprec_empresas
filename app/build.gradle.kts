@@ -9,6 +9,13 @@ plugins {
     id("org.jetbrains.kotlin.kapt")
 }
 
+// Read keystore credentials from environment (for CI/CD)
+val keystorePassword: String? = System.getenv("KEYSTORE_PASSWORD")
+val keyAlias: String? = System.getenv("KEY_ALIAS")
+val keyPassword: String? = System.getenv("KEY_PASSWORD") ?: keystorePassword
+val keystoreFile = rootProject.file("bolivia_empresas.jks")
+val canSign = keystoreFile.exists() && keystorePassword != null && keyAlias != null
+
 android {
     namespace = "com.locototeam.seprecbolivia"
     compileSdk = 36
@@ -26,6 +33,17 @@ android {
         }
     }
 
+    signingConfigs {
+        if (canSign) {
+            create("release") {
+                storeFile = keystoreFile
+                storePassword = keystorePassword
+                keyAlias = keyAlias
+                keyPassword = keyPassword
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -33,6 +51,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            if (canSign) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
     compileOptions {
