@@ -16,6 +16,33 @@ val keyPassword: String? = System.getenv("KEY_PASSWORD") ?: keystorePassword
 val keystoreFile = rootProject.file("bolivia_empresas.jks")
 val canSign = keystoreFile.exists() && keystorePassword != null && keyAlias != null
 
+// Auto-detect app version from environment or git tag
+// In CI, VERSION_NAME is set by the workflow (e.g., "1.2.3")
+// Locally, falls back to git describe or a default
+fun getVersionName(): String {
+    System.getenv("VERSION_NAME")?.let { return it }
+    try {
+        val process = ProcessBuilder("git", "describe", "--tags", "--abbrev=0")
+            .directory(rootProject.projectDir)
+            .redirectErrorStream(true)
+            .start()
+        val tag = process.inputStream.bufferedReader().readText().trim()
+        if (tag.isNotEmpty()) return tag.removePrefix("v")
+    } catch (_: Exception) {}
+    return "0.0.0"
+}
+
+fun getVersionCode(versionName: String): Int {
+    val parts = versionName.split(".")
+    val major = parts.getOrNull(0)?.toIntOrNull() ?: 0
+    val minor = parts.getOrNull(1)?.toIntOrNull() ?: 0
+    val patch = parts.getOrNull(2)?.toIntOrNull() ?: 0
+    return major * 10000 + minor * 100 + patch
+}
+
+val appVersionName = getVersionName()
+val appVersionCode = getVersionCode(appVersionName)
+
 android {
     namespace = "com.locototeam.seprecbolivia"
     compileSdk = 36
@@ -24,8 +51,8 @@ android {
         applicationId = "com.locototeam.seprecbolivia"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "2025.0216"
+        versionCode = appVersionCode
+        versionName = appVersionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
