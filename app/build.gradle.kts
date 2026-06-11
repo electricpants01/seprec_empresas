@@ -16,8 +16,8 @@ val keyPassword: String? = System.getenv("KEY_PASSWORD") ?: keystorePassword
 val keystoreFile = rootProject.file("bolivia_empresas.jks")
 val canSign = keystoreFile.exists() && keystorePassword != null && keyAlias != null
 
-// Auto-detect app version from environment or git tag
-// In CI, VERSION_NAME is set by the workflow (e.g., "1.2.3")
+// Auto-detect app versionName from environment or git tag
+// In CI, VERSION_NAME is set by the workflow (e.g., "2026.06.11")
 // Locally, falls back to git describe or a default
 fun getVersionName(): String {
     System.getenv("VERSION_NAME")?.let { return it }
@@ -32,16 +32,14 @@ fun getVersionName(): String {
     return "0.0.0"
 }
 
-fun getVersionCode(versionName: String): Int {
-    val parts = versionName.split(".")
-    val major = parts.getOrNull(0)?.toIntOrNull() ?: 0
-    val minor = parts.getOrNull(1)?.toIntOrNull() ?: 0
-    val patch = parts.getOrNull(2)?.toIntOrNull() ?: 0
-    return major * 10000 + minor * 100 + patch
-}
-
 val appVersionName = getVersionName()
-val appVersionCode = getVersionCode(appVersionName)
+
+// versionCode is manually maintained by the developer
+// Set via gradle.properties: appVersionCodeOverride=X
+// Or pass via command line: -PappVersionCodeOverride=X
+val appVersionCode: Int = (findProperty("appVersionCodeOverride") as? String)?.toIntOrNull()
+    ?: System.getenv("VERSION_CODE")?.toIntOrNull()
+    ?: 1
 
 android {
     namespace = "com.locototeam.seprecbolivia"

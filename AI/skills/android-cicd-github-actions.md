@@ -12,19 +12,21 @@ echo 'export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/H
 source ~/.zshrc
 ```
 
-No `org.gradle.java.home` needed in `gradle.properties` — Gradle picks up `JAVA_HOME` from the environment both locally and on CI.
+No `org.gradle.java.home` needed in `gradle.properties`.
 
-## Dynamic Versioning
+## Versioning
 
-The app's `versionName` and `versionCode` are derived automatically:
+### versionName (automatic)
+Derived from the branch/tag name. Examples:
+- `release/2026.06.11` → versionName `2026.06.11`
+- `v2026.06.11` → versionName `2026.06.11`
+- Local: from latest git tag, falls back to `0.0.0`
 
-- **CI**: From the `VERSION_NAME` env var set by the workflow (extracted from branch/tag name)
-- **Local**: From the latest git tag via `git describe --tags`, stripped of `v` prefix
-- **Fallback**: `0.0.0` / versionCode `1`
-
-`versionCode` is computed as: `major * 10000 + minor * 100 + patch`
-
-Example: version `1.2.3` → versionCode `10203`
+### versionCode (manual)
+Controlled by the developer. Set via:
+- `gradle.properties`: `appVersionCodeOverride=X`
+- CI: `VERSION_CODE` GitHub Secret
+- Defaults to `1` if not set
 
 ## Workflows
 
@@ -41,17 +43,17 @@ Example: version `1.2.3` → versionCode `10203`
 | Artifact | Uploads `app-debug.apk` |
 
 ### 2. Release (`release.yml`)
-**Trigger**: Pushing to `release/*` branch or `v*` tag (e.g., `release/1.2.3` or `v1.2.3`)
+**Trigger**: Pushing to `release/*` branch or `v*` tag
 
 | Step | Action |
 |---|---|
 | Checkout | `actions/checkout@v4` (fetch-depth: 0) |
 | Get version | Extracts version from branch/tag name, sets `VERSION_NAME` env var |
-| Decode keystore | `base64 --decode` from `KEYSTORE_BASE64` secret → `bolivia_empresas.jks` |
+| Decode keystore | `base64 --decode` from `KEYSTORE_BASE64` secret |
 | JDK 21 | `actions/setup-java@v4` |
 | Android SDK | `android-actions/setup-android@v3` |
-| Build signed APK | `./gradlew assembleRelease` |
-| GitHub Release | `softprops/action-gh-release@v2` with APK attached |
+| Build signed APK | `./gradlew assembleRelease` with `VERSION_CODE` secret |
+| GitHub Release | `softprops/action-gh-release@v2` named `release-YYYY.MM.DD` |
 
 ## Required GitHub Secrets
 
@@ -61,20 +63,7 @@ Example: version `1.2.3` → versionCode `10203`
 | `KEYSTORE_PASSWORD` | Keystore password |
 | `KEY_ALIAS` | Key alias name |
 | `KEY_PASSWORD` | Key password (may be same as keystore password) |
-
-## Signing Config
-
-The `app/build.gradle.kts` reads signing credentials from environment variables:
-
-```kotlin
-val keystorePassword: String? = System.getenv("KEYSTORE_PASSWORD")
-val keyAlias: String? = System.getenv("KEY_ALIAS")
-val keyPassword: String? = System.getenv("KEY_PASSWORD") ?: keystorePassword
-val keystoreFile = rootProject.file("bolivia_empresas.jks")
-val canSign = keystoreFile.exists() && keystorePassword != null && keyAlias != null
-```
-
-If env vars are not set (local builds), the release build is unsigned. Only the CI/CD pipeline produces signed APKs.
+| `VERSION_CODE` | Manual version code (integer, e.g., `1`, `2`, `3`) |
 
 ## How to Release
 
@@ -82,14 +71,12 @@ If env vars are not set (local builds), the release build is unsigned. Only the 
 # Encode the keystore for GitHub Secret (do this once)
 base64 -i bolivia_empresas.jks | pbcopy
 
-# Option A: Push a release branch
-# App version becomes 1.2.3, versionCode becomes 10203
-git checkout -b release/1.2.3
-git push origin release/1.2.3
-
-# Option B: Push a version tag
-git tag v1.2.3
-git push origin v1.2.3
+# Create and push a release branch
+# Release will be named: release-2026.06.11
+# App versionName: 2026.06.11
+# App versionCode: from VERSION_CODE secret (set manually in GitHub)
+git checkout -b release/2026.06.11
+git push origin release/2026.06.11
 ```
 
 The Release workflow builds a signed APK and publishes it to GitHub Releases automatically.
