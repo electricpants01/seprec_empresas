@@ -59,7 +59,6 @@ All secrets are stored in the `PROD` environment. The release workflow reference
 
 ```bash
 # Encode the keystore for GitHub Secret (do this once)
-base64 -i bolivia_empresas.jks | pbcopy
 
 # Bump the version manually in app/build.gradle.kts:
 #   val appVersionName = "2026.06.11"
