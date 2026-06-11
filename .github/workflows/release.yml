@@ -34,7 +34,8 @@ jobs:
           echo "VERSION_NAME=$VERSION" >> $GITHUB_ENV
 
       - name: Decode keystore
-        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > bolivia_empresas.jks
+        run: |
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > bolivia_empresas.jks
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
 
@@ -58,7 +59,6 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-          VERSION_CODE: ${{ secrets.VERSION_CODE }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
