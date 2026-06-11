@@ -30,6 +30,11 @@ jobs:
           fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
+      - name: Decode keystore
+        run: echo "$KEYSTORE_BASE64" | base64 --decode > bolivia_empresas.jks
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
