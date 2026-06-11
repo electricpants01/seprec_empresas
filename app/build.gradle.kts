@@ -35,8 +35,8 @@ android {
     }
 
     signingConfigs {
-        if (canSign) {
-            create("release") {
+        create("release") {
+            if (canSign) {
                 storeFile = keystoreFile
                 storePassword = keystorePassword
                 keyAlias = keyAlias
@@ -52,9 +52,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            if (canSign) {
-                signingConfig = signingConfigs.getByName("release")
-            }
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
