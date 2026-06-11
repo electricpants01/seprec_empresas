@@ -40,7 +40,7 @@ android {
                 storeFile = keystoreFile
                 storePassword = keystorePassword
                 keyAlias = keyAlias
-                keyPassword = keyPassword
+                keyPassword = System.getenv("KEY_PASSWORD")
             }
         }
     }
