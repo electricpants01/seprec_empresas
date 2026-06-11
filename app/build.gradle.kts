@@ -39,7 +39,7 @@ android {
             create("release") {
                 storeFile = myKeystoreFile
                 storePassword = myKeystorePassword
-                keyAlias = keyAlias
+                keyAlias = myKeyAlias
                 keyPassword = myKeyPassword
             }
         }
