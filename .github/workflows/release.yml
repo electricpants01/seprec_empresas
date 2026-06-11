@@ -14,12 +14,11 @@ jobs:
   release:
     name: Build & Release
     runs-on: ubuntu-latest
+    environment: PROD
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Get version name
         id: version
@@ -30,10 +29,9 @@ jobs:
             VERSION="${GITHUB_REF#refs/heads/release/}"
           fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "VERSION_NAME=$VERSION" >> $GITHUB_ENV
 
       - name: Decode keystore
-        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > bolivia_empresas.jks
+        run: echo "$KEYSTORE_BASE64" | base64 --decode > bolivia_empresas.jks
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
 
@@ -57,7 +55,6 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-          VERSION_CODE: ${{ secrets.VERSION_CODE }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
