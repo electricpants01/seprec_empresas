@@ -11,7 +11,7 @@ plugins {
 
 android {
     namespace = "com.locototeam.seprecbolivia"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.locototeam.seprecbolivia"
@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.material.icons.extended)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -93,12 +94,12 @@ dependencies {
     // work manager
     implementation(libs.work.manager)
     // chucker
-    debugImplementation("com.github.chuckerteam.chucker:library:3.5.2")
-    releaseImplementation("com.github.chuckerteam.chucker:library-no-op:3.5.2")
+    debugImplementation("com.github.chuckerteam.chucker:library:4.3.1")
+    releaseImplementation("com.github.chuckerteam.chucker:library-no-op:4.3.1")
     // map compose
-    implementation("com.google.android.gms:play-services-location:21.1.0")
-    implementation("com.google.maps.android:maps-compose:1.0.0")
-    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+    implementation("com.google.maps.android:maps-compose:8.3.0")
+    implementation("com.google.android.gms:play-services-maps:20.0.0")
     // window size class
-    implementation("androidx.compose.material3:material3-window-size-class:1.2.0")
+    implementation("androidx.compose.material3:material3-window-size-class:1.4.0")
 }

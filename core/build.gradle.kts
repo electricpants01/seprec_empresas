@@ -11,7 +11,7 @@ plugins {
 
 android {
     namespace = "com.locototeam.core"
-    compileSdk = 35
+    compileSdk = 36
 
     buildFeatures {
         viewBinding = true
